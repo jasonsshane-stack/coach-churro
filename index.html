@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Coach Churro Workout Tracker</title>
+  
+  <!-- Apple & PWA Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Coach Churro">
+  <meta name="theme-color" content="#FAF6F0">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23FAF6F0'/><circle cx='50' cy='50' r='38' fill='%23F4E0A5'/><text x='50' y='62' font-size='42' text-anchor='middle'>🐾</text></svg>">
+
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            churro: {
+              cream: '#FAF6F0',
+              card: '#FFFBF7',
+              orange: '#E07A5F',
+              gold: '#F4A261',
+              peach: '#F4E0A5',
+              dark: '#3D405B',
+              rose: '#E8A598',
+              emerald: '#81B29A',
+              purple: '#9B5DE5'
+            }
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF6F0;
+      color: #3D405B;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes tailWag {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(12deg); }
+    }
+    .wagging-tail {
+      transform-origin: bottom left;
+      animation: tailWag 2.5s ease-in-out infinite;
+    }
+    @keyframes earTwitch {
+      0%, 90%, 100% { transform: rotate(0deg); }
+      93% { transform: rotate(-6deg); }
+      96% { transform: rotate(4deg); }
+    }
+    .twitching-ear {
+      transform-origin: bottom center;
+      animation: earTwitch 4s infinite;
+    }
+    @keyframes floatBubble {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+    .floating-bubble {
+      animation: floatBubble 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col max-w-md mx-auto relative shadow-2xl bg-churro-cream pb-12">
+
+  <!-- Header Navigation -->
+  <header class="pt-10 pb-4 px-6 flex items-center justify-between border-b border-orange-100 bg-churro-card sticky top-0 z-30 shadow-sm">
+    <div class="flex items-center space-x-2">
+      <span class="text-2xl">🐾</span>
+      <div>
+        <h1 class="font-black text-xl text-churro-dark tracking-tight leading-none">COACH CHURRO</h1>
+        <p class="text-xs text-orange-600 font-semibold mt-0.5">3x/Week Fitness Challenge</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-2">
+      <button onclick="switchTab('tracker')" id="btn-tab-tracker" class="px-3 py-1.5 rounded-full text-xs font-bold bg-churro-orange text-white shadow-sm transition">Tracker</button>
+      <button onclick="switchTab('calendar')" id="btn-tab-calendar" class="px-3 py-1.5 rounded-full text-xs font-bold bg-orange-100 text-churro-dark hover:bg-orange-200 transition">Calendar</button>
+      <button onclick="switchTab('badges')" id="btn-tab-badges" class="px-3 py-1.5 rounded-full text-xs font-bold bg-orange-100 text-churro-dark hover:bg-orange-200 transition">Badges</button>
+    </div>
+  </header>
+
+  <!-- TAB 1: MAIN TRACKER VIEW -->
+  <main id="view-tracker" class="p-5 space-x-0 space-y-5 flex-1">
+
+    <!-- Coach Churro Mascot & Speech Card -->
+    <div class="bg-churro-card rounded-3xl p-5 border-2 border-orange-200/60 shadow-md relative overflow-hidden flex flex-col items-center">
+      
+      <div class="w-full flex items-center justify-between mb-2">
+        <div class="flex items-center space-x-1.5 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">
+          <span class="text-xs">🔥</span>
+          <span id="streak-counter" class="text-xs font-black text-amber-800">0 Week Streak</span>
+        </div>
+        <div id="level-badge" class="flex items-center space-x-1.5 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">
+          <span class="text-xs">🏷️</span>
+          <span id="level-text" class="text-xs font-black text-purple-900">Level 1: Headband</span>
+        </div>
+      </div>
+
+      <!-- Interactive SVG Coach Churro (Calico Cat) -->
+      <div class="relative w-40 h-40 my-1 cursor-pointer group" onclick="churroMeow()">
+        <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+          <!-- Tail -->
+          <path class="wagging-tail" d="M 145 130 C 175 120, 185 80, 165 60 C 155 50, 145 65, 152 75 C 162 90, 155 115, 138 125 Z" fill="#3D405B" />
+          <path class="wagging-tail" d="M 160 65 C 165 60, 175 62, 170 72 C 165 80, 155 85, 152 75 Z" fill="#E07A5F" />
+
+          <!-- Body (Fluffy Calico) -->
+          <ellipse cx="100" cy="135" rx="55" ry="45" fill="#FAF6F0" stroke="#3D405B" stroke-width="3" />
+          <!-- Dark Patch Left -->
+          <path d="M 50 120 Q 70 110 65 145 Q 48 150 50 120 Z" fill="#3D405B" />
+          <!-- Orange Patch Right -->
+          <path d="M 135 110 Q 150 130 130 155 Q 120 135 135 110 Z" fill="#E07A5F" />
+
+          <!-- Paws -->
+          <ellipse cx="75" cy="172" rx="12" ry="8" fill="#FFF" stroke="#3D405B" stroke-width="2.5" />
+          <ellipse cx="125" cy="172" rx="12" ry="8" fill="#FFF" stroke="#3D405B" stroke-width="2.5" />
+
+          <!-- Head -->
+          <circle cx="100" cy="85" r="42" fill="#FAF6F0" stroke="#3D405B" stroke-width="3" />
+
+          <!-- Calico Face Markings -->
+          <!-- Left Dark Patch -->
+          <path d="M 60 70 Q 80 60 75 90 Q 60 92 60 70 Z" fill="#3D405B" />
+          <!-- Right Orange Patch -->
+          <path d="M 140 70 Q 120 60 125 90 Q 140 92 140 70 Z" fill="#E07A5F" />
+          <!-- White Chest & Muzzle -->
+          <path d="M 85 90 Q 100 80 115 90 Q 110 115 90 115 Z" fill="#FFFFFF" />
+
+          <!-- Ears -->
+          <path class="twitching-ear" d="M 65 55 L 50 22 L 80 48 Z" fill="#E07A5F" stroke="#3D405B" stroke-width="2.5" />
+          <path class="twitching-ear" d="M 135 55 L 150 22 L 120 48 Z" fill="#3D405B" stroke="#3D405B" stroke-width="2.5" />
+          <path class="twitching-ear" d="M 67 50 L 56 28 L 76 46 Z" fill="#E8A598" />
+
+          <!-- Eyes (Soft Green) -->
+          <ellipse cx="82" cy="82" rx="7" ry="9" fill="#81B29A" stroke="#3D405B" stroke-width="2" />
+          <ellipse cx="118" cy="82" rx="7" ry="9" fill="#81B29A" stroke="#3D405B" stroke-width="2" />
+          <circle cx="80" cy="80" r="2.5" fill="#FFF" />
+          <circle cx="116" cy="80" r="2.5" fill="#FFF" />
+
+          <!-- Nose & Whiskers -->
+          <polygon points="100,92 95,87 105,87" fill="#E8A598" />
+          <path d="M 100 92 L 100 97 Q 94 102 88 98 M 100 97 Q 106 102 112 98" fill="none" stroke="#3D405B" stroke-width="2" stroke-linecap="round" />
+          <!-- Whiskers -->
+          <line x1="60" y1="88" x2="40" y2="84" stroke="#3D405B" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="60" y1="94" x2="38" y2="95" stroke="#3D405B" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="140" y1="88" x2="160" y2="84" stroke="#3D405B" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="140" y1="94" x2="162" y2="95" stroke="#3D405B" stroke-width="1.5" stroke-linecap="round" />
+
+          <!-- Dynamic Accessories Based on Level -->
+          <!-- Level 1+: Athletic Headband -->
+          <g id="acc-headband">
+            <path d="M 60 52 Q 100 42 140 52" fill="none" stroke="#E07A5F" stroke-width="9" stroke-linecap="round" />
+            <path d="M 60 52 Q 100 42 140 52" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" />
+          </g>
+
+          <!-- Level 2+: Gold Medal Collar -->
+          <g id="acc-medal" class="hidden">
+            <path d="M 75 125 Q 100 140 125 125" fill="none" stroke="#E07A5F" stroke-width="4" />
+            <circle cx="100" cy="138" r="9" fill="#F4A261" stroke="#3D405B" stroke-width="1.5" />
+            <text x="100" y="141" font-size="9" text-anchor="middle" fill="#3D405B" font-weight="bold">★</text>
+          </g>
+
+          <!-- Level 3+: Wrist Sweatbands & Trophy -->
+          <g id="acc-sweatbands" class="hidden">
+            <rect x="67" y="166" width="16" height="6" rx="2" fill="#E07A5F" />
+            <rect x="117" y="166" width="16" height="6" rx="2" fill="#E07A5F" />
+          </g>
+
+          <!-- Level 4: Champion Crown & Cape -->
+          <g id="acc-crown" class="hidden">
+            <!-- Cape -->
+            <path d="M 60 115 Q 100 125 140 115 L 155 165 Q 100 175 45 165 Z" fill="#E07A5F" opacity="0.85" />
+            <!-- Crown -->
+            <polygon points="85,42 90,25 97,35 100,20 103,35 110,25 115,42" fill="#F4A261" stroke="#3D405B" stroke-width="1.5" />
+            <circle cx="100" cy="20" r="2.5" fill="#E07A5F" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Speech Bubble -->
+      <div class="floating-bubble bg-orange-50 border-2 border-orange-200 rounded-2xl p-3 text-center relative w-full mt-2 shadow-sm">
+        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-4 h-4 bg-orange-50 border-t-2 border-l-2 border-orange-200 rotate-45"></div>
+        <p id="churro-dialogue" class="text-xs font-bold text-churro-dark leading-relaxed">
+          "What are you in the mood for today? A Peloton session or a quick reset? Purr-fect time to move! 🐾"
+        </p>
+      </div>
+    </div>
+
+    <!-- 6-Week Challenge Overview Card -->
+    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="trophy" class="w-5 h-5 text-churro-orange"></i>
+          <h2 class="font-black text-sm text-churro-dark uppercase tracking-wider">6-Week Challenge Progress</h2>
+        </div>
+        <span id="challenge-count" class="text-xs font-extrabold text-churro-orange bg-orange-100 px-2.5 py-1 rounded-full">0 / 18 Workouts</span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="w-full bg-orange-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-orange-200">
+        <div id="challenge-bar" class="bg-gradient-to-r from-churro-gold to-churro-orange h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+      </div>
+
+      <!-- 6 Week Badge Dots -->
+      <div class="grid grid-cols-6 gap-1.5 pt-1" id="week-dots-grid">
+        <!-- Javascript renders 6 week status cards -->
+      </div>
+    </div>
+
+    <!-- Quick Logging Action Card -->
+    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-4">
+      <h2 class="font-black text-sm text-churro-dark uppercase tracking-wider flex items-center justify-between">
+        <span>Log Today's Workout</span>
+        <span id="today-date-str" class="text-xs font-normal text-gray-500">Today</span>
+      </h2>
+
+      <!-- Peloton Mood Selector -->
+      <div class="space-y-1.5">
+        <label class="text-xs font-bold text-gray-600">Peloton / Workout Focus:</label>
+        <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+          <button onclick="selectFocus('Peloton Lower Body')" class="focus-btn p-2 rounded-xl border border-gray-200 text-left hover:border-churro-orange transition flex items-center justify-between">
+            <span>Peloton Lower Body</span>
+            <span class="text-sm">🦵</span>
+          </button>
+          <button onclick="selectFocus('Peloton Upper Body')" class="focus-btn p-2 rounded-xl border border-gray-200 text-left hover:border-churro-orange transition flex items-center justify-between">
+            <span>Peloton Upper Body</span>
+            <span class="text-sm">💪</span>
+          </button>
+          <button onclick="selectFocus('Peloton Full Body')" class="focus-btn p-2 rounded-xl border border-gray-200 text-left hover:border-churro-orange transition flex items-center justify-between">
+            <span>Peloton Full Body</span>
+            <span class="text-sm">🔥</span>
+          </button>
+          <button onclick="selectFocus('Peloton Arms & Core')" class="focus-btn p-2 rounded-xl border border-gray-200 text-left hover:border-churro-orange transition flex items-center justify-between">
+            <span>Peloton Arms & Core</span>
+            <span class="text-sm">✨</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Checkboxes for Weights & Cardio -->
+      <div class="space-y-3 pt-2">
+        <!-- Weight Training Checkbox -->
+        <div class="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-100 flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <input type="checkbox" id="check-weights" onchange="toggleWorkoutType('weights')" class="w-6 h-6 rounded-lg text-churro-purple focus:ring-purple-400">
+            <div>
+              <p class="font-black text-sm text-purple-950">Weight Training</p>
+              <p class="text-xs text-purple-700">Dumbbells & Cable System</p>
+            </div>
+          </div>
+          <select id="duration-weights" class="text-xs font-bold bg-white border border-purple-200 rounded-lg px-2 py-1 text-purple-900">
+            <option value="10">10 Min</option>
+            <option value="15">15 Min</option>
+            <option value="20" selected>20 Min</option>
+            <option value="25">25 Min</option>
+            <option value="30">30 Min</option>
+          </select>
+        </div>
+
+        <!-- Cardio Checkbox -->
+        <div class="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <input type="checkbox" id="check-cardio" onchange="toggleWorkoutType('cardio')" class="w-6 h-6 rounded-lg text-churro-rose focus:ring-rose-400">
+            <div>
+              <p class="font-black text-sm text-rose-950">Cardio / Peloton Bike</p>
+              <p class="text-xs text-rose-700">Spin, Bike, or Run</p>
+            </div>
+          </div>
+          <select id="duration-cardio" class="text-xs font-bold bg-white border border-rose-200 rounded-lg px-2 py-1 text-rose-900">
+            <option value="10">10 Min</option>
+            <option value="15">15 Min</option>
+            <option value="20" selected>20 Min</option>
+            <option value="25">25 Min</option>
+            <option value="30">30 Min</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Complete Button -->
+      <button onclick="logWorkoutSubmit()" class="w-full py-3.5 bg-churro-orange hover:bg-orange-600 active:scale-95 text-white font-black rounded-2xl shadow-lg shadow-orange-200 transition duration-150 flex items-center justify-center space-x-2 text-sm">
+        <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+        <span>LOG TODAY'S WORKOUT</span>
+      </button>
+    </div>
+
+    <!-- Current Week Tracker -->
+    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="font-black text-sm text-churro-dark uppercase tracking-wider">This Week's Target (3x Goal)</h2>
+        <span id="this-week-count" class="text-xs font-bold text-churro-dark">0 / 3 Done</span>
+      </div>
+      <div class="grid grid-cols-7 gap-1.5 text-center" id="weekly-days-grid">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: MONTHLY CALENDAR VIEW -->
+  <main id="view-calendar" class="p-5 space-y-5 flex-1 hidden">
+    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <button onclick="changeMonth(-1)" class="p-2 rounded-xl bg-orange-100 text-churro-dark font-bold text-xs">← Prev</button>
+        <h2 id="calendar-month-title" class="font-black text-base text-churro-dark">October 2026</h2>
+        <button onclick="changeMonth(1)" class="p-2 rounded-xl bg-orange-100 text-churro-dark font-bold text-xs">Next →</button>
+      </div>
+
+      <!-- Calendar Grid -->
+      <div class="grid grid-cols-7 gap-1 text-center font-bold text-xs text-gray-400 pb-1">
+        <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+      </div>
+      <div id="calendar-days-grid" class="grid grid-cols-7 gap-1 text-center text-xs">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="flex items-center justify-center space-x-4 pt-3 border-t border-gray-100 text-xs font-semibold">
+        <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span><span>Weights</span></div>
+        <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span><span>Cardio</span></div>
+        <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span><span>Both</span></div>
+      </div>
+    </div>
+
+    <!-- Monthly Summary Stats -->
+    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-3">
+      <h3 class="font-black text-sm text-churro-dark uppercase tracking-wider">Monthly Totals</h3>
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="p-3 bg-orange-50 rounded-2xl border border-orange-100">
+          <p class="text-xl font-black text-churro-orange" id="stat-month-workouts">0</p>
+          <p class="text-[10px] font-bold text-gray-500 uppercase mt-0.5">Workouts</p>
+        </div>
+        <div class="p-3 bg-purple-50 rounded-2xl border border-purple-100">
+          <p class="text-xl font-black text-purple-700" id="stat-month-weights">0m</p>
+          <p class="text-[10px] font-bold text-gray-500 uppercase mt-0.5">Weights</p>
+        </div>
+        <div class="p-3 bg-rose-50 rounded-2xl border border-rose-100">
+          <p class="text-xl font-black text-rose-700" id="stat-month-cardio">0m</p>
+          <p class="text-[10px] font-bold text-gray-500 uppercase mt-0.5">Cardio</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 3: BADGES & ACHIEVEMENTS -->
+  <main id="view-badges" class="p-5 space-y-5 flex-1 hidden">
+    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="font-black text-sm text-churro-dark uppercase tracking-wider">Milestone Badges</h2>
+        <span id="badges-unlocked-count" class="text-xs font-bold text-churro-orange bg-orange-100 px-2.5 py-1 rounded-full">0 / 8 Unlocked</span>
+      </div>
+      <p class="text-xs text-gray-500">Tap any badge to see how Coach Churro awarded it!</p>
+
+      <div class="grid grid-cols-2 gap-3 pt-2" id="badges-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // State Management
+    let state = {
+      logs: JSON.parse(localStorage.getItem('churro_logs') || '{}'),
+      currentFocus: '',
+      challengeStartDate: localStorage.getItem('churro_start_date') || new Date().toISOString().split('T')[0],
+      selectedMonth: new Date().getMonth(),
+      selectedYear: new Date().getFullYear()
+    };
+
+    const BADGES = [
+      { id: 'first_step', title: 'First Paw Forward', icon: '🐾', desc: 'Logged your very 1st workout!', check: (logs) => Object.keys(logs).length >= 1 },
+      { id: 'peloton_fan', title: 'Peloton Enthusiast', icon: '🚴‍♀️', desc: 'Completed 5 Peloton sessions', check: (logs) => Object.values(logs).filter(l => l.focus && l.focus.includes('Peloton')).length >= 5 },
+      { id: 'streak_2w', title: 'Streak Legend', icon: '🔥', desc: 'Completed 3x workouts for 2 weeks', check: (logs) => getConsecutiveWeeks(logs) >= 2 },
+      { id: 'quick_hit', title: 'Quick Hit Specialist', icon: '⚡', desc: 'Completed 5 quick 10-15 min sessions', check: (logs) => Object.values(logs).filter(l => (l.wMin && l.wMin <= 15) || (l.cMin && l.cMin <= 15)).length >= 5 },
+      { id: 'combo_master', title: 'Strength & Cardio', icon: '🏋️‍♀️', desc: 'Logged both Weights & Cardio in 1 day', check: (logs) => Object.values(logs).some(l => l.weights && l.cardio) },
+      { id: 'halfway', title: 'Halfway Purr-fect', icon: '🏆', desc: 'Completed 9 challenge workouts', check: (logs) => Object.keys(logs).length >= 9 },
+      { id: 'weekend', title: 'Weekend Warrior', icon: '🌅', desc: 'Worked out on a Saturday or Sunday', check: (logs) => Object.keys(logs).some(d => { let day = new Date(d).getDay(); return day === 0 || day === 6; }) },
+      { id: 'champion', title: '6-Week Champion', icon: '👑', desc: 'Completed all 18 challenge workouts!', check: (logs) => Object.keys(logs).length >= 18 }
+    ];
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      document.getElementById('today-date-str').innerText = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      renderApp();
+    });
+
+    function saveState() {
+      localStorage.setItem('churro_logs', JSON.stringify(state.logs));
+      localStorage.setItem('churro_start_date', state.challengeStartDate);
+      renderApp();
+    }
+
+    function renderApp() {
+      renderTracker();
+      renderCalendar();
+      renderBadges();
+      updateLevelAndOutfit();
+    }
+
+    function selectFocus(focusText) {
+      state.currentFocus = focusText;
+      document.querySelectorAll('.focus-btn').forEach(btn => {
+        if(btn.innerText.includes(focusText)) {
+          btn.classList.add('border-churro-orange', 'bg-orange-50');
+        } else {
+          btn.classList.remove('border-churro-orange', 'bg-orange-50');
+        }
+      });
+    }
+
+    function toggleWorkoutType(type) {
+      // Handles checkbox toggles
+    }
+
+    function logWorkoutSubmit() {
+      const todayKey = new Date().toISOString().split('T')[0];
+      const hasWeights = document.getElementById('check-weights').checked;
+      const hasCardio = document.getElementById('check-cardio').checked;
+
+      if(!hasWeights && !hasCardio) {
+        alert("Please select Weights or Cardio to log!");
+        return;
+      }
+
+      state.logs[todayKey] = {
+        weights: hasWeights,
+        wMin: hasWeights ? parseInt(document.getElementById('duration-weights').value) : 0,
+        cardio: hasCardio,
+        cMin: hasCardio ? parseInt(document.getElementById('duration-cardio').value) : 0,
+        focus: state.currentFocus || 'Peloton Workout'
+      };
+
+      saveState();
+      playSynthChime();
+      confetti({ particleCount: 60, spread: 60, origin: { y: 0.7 } });
+
+      const praises = [
+        "Purr-fect effort today! You made time for yourself — that's how progress happens! 🐾",
+        "Strong work! Another step closer to your 3x weekly goal! 🔥",
+        "Consistency over perfection! You showed up and crushed it today! ✨",
+        "Coach Churro approved! So proud of your dedication today! 🎉"
+      ];
+      document.getElementById('churro-dialogue').innerText = praises[Math.floor(Math.random() * praises.length)];
+    }
+
+    function renderTracker() {
+      const totalWorkouts = Object.keys(state.logs).length;
+      document.getElementById('challenge-count').innerText = `${totalWorkouts} / 18 Workouts`;
+      const pct = Math.min(100, Math.round((totalWorkouts / 18) * 100));
+      document.getElementById('challenge-bar').style.width = `${pct}%`;
+
+      // Render 6-week dots
+      const dotsGrid = document.getElementById('week-dots-grid');
+      dotsGrid.innerHTML = '';
+      for(let w = 1; w <= 6; w++) {
+        const completedInWeek = getWorkoutsInWeek(w);
+        const isDone = completedInWeek >= 3;
+        dotsGrid.innerHTML += `
+          <div class="p-1.5 rounded-xl text-center ${isDone ? 'bg-emerald-100 border border-emerald-300 text-emerald-900' : 'bg-gray-100 text-gray-500'}">
+            <p class="text-[9px] font-black uppercase">Wk ${w}</p>
+            <p class="text-xs font-bold">${completedInWeek}/3</p>
+          </div>
+        `;
+      }
+
+      // Render this week days
+      const weeklyGrid = document.getElementById('weekly-days-grid');
+      weeklyGrid.innerHTML = '';
+      const days = ['S','M','T','W','T','F','S'];
+      const curr = new Date();
+      const first = curr.getDate() - curr.getDay();
+
+      let doneThisWeek = 0;
+      for(let i=0; i<7; i++) {
+        const dayDate = new Date(curr.setDate(first + i)).toISOString().split('T')[0];
+        const hasLog = !!state.logs[dayDate];
+        if(hasLog) doneThisWeek++;
+        weeklyGrid.innerHTML += `
+          <div class="p-2 rounded-xl ${hasLog ? 'bg-churro-orange text-white' : 'bg-gray-100 text-gray-400'}">
+            <p class="text-[10px] font-bold">${days[i]}</p>
+            <p class="text-xs font-black">${hasLog ? '✓' : '-'}</p>
+          </div>
+        `;
+      }
+      document.getElementById('this-week-count').innerText = `${doneThisWeek} / 3 Done`;
+    }
+
+    function updateLevelAndOutfit() {
+      const total = Object.keys(state.logs).length;
+      let lvl = "Level 1: Headband";
+
+      document.getElementById('acc-medal').classList.add('hidden');
+      document.getElementById('acc-sweatbands').classList.add('hidden');
+      document.getElementById('acc-crown').classList.add('hidden');
+
+      if(total >= 18) {
+        lvl = "Level 4: Champion";
+        document.getElementById('acc-medal').classList.remove('hidden');
+        document.getElementById('acc-sweatbands').classList.remove('hidden');
+        document.getElementById('acc-crown').classList.remove('hidden');
+      } else if(total >= 12) {
+        lvl = "Level 3: Sweatbands";
+        document.getElementById('acc-medal').classList.remove('hidden');
+        document.getElementById('acc-sweatbands').classList.remove('hidden');
+      } else if(total >= 6) {
+        lvl = "Level 2: Gold Medal";
+        document.getElementById('acc-medal').classList.remove('hidden');
+      }
+      document.getElementById('level-text').innerText = lvl;
+    }
+
+    function renderBadges() {
+      const grid = document.getElementById('badges-grid');
+      grid.innerHTML = '';
+      let unlockedCount = 0;
+
+      BADGES.forEach(badge => {
+        const isUnlocked = badge.check(state.logs);
+        if(isUnlocked) unlockedCount++;
+        grid.innerHTML += `
+          <div onclick="alert('${badge.title}: ${badge.desc}')" class="p-3 rounded-2xl border ${isUnlocked ? 'bg-amber-50/80 border-amber-200 text-amber-950' : 'bg-gray-50 border-gray-200 opacity-50'} flex items-center space-x-3 cursor-pointer">
+            <span class="text-2xl">${badge.icon}</span>
+            <div>
+              <p class="text-xs font-black">${badge.title}</p>
+              <p class="text-[10px] text-gray-500">${isUnlocked ? 'Unlocked ✓' : 'Locked'}</p>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('badges-unlocked-count').innerText = `${unlockedCount} / ${BADGES.length} Unlocked`;
+    }
+
+    function renderCalendar() {
+      const title = document.getElementById('calendar-month-title');
+      const grid = document.getElementById('calendar-days-grid');
+      const date = new Date(state.selectedYear, state.selectedMonth, 1);
+      title.innerText = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      grid.innerHTML = '';
+      const firstDay = date.getDay();
+      const daysInMonth = new Date(state.selectedYear, state.selectedMonth + 1, 0).getDate();
+
+      for(let i=0; i<firstDay; i++) {
+        grid.innerHTML += `<div></div>`;
+      }
+
+      let mWorkouts = 0, mWeights = 0, mCardio = 0;
+
+      for(let d=1; d<=daysInMonth; d++) {
+        const key = `${state.selectedYear}-${String(state.selectedMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const log = state.logs[key];
+        let bg = 'bg-gray-50 text-gray-700';
+
+        if(log) {
+          mWorkouts++;
+          if(log.weights) mWeights += (log.wMin || 20);
+          if(log.cardio) mCardio += (log.cMin || 20);
+
+          if(log.weights && log.cardio) bg = 'bg-emerald-500 text-white font-black';
+          else if(log.weights) bg = 'bg-purple-500 text-white font-black';
+          else bg = 'bg-rose-500 text-white font-black';
+        }
+
+        grid.innerHTML += `<div class="p-2 rounded-xl ${bg}">${d}</div>`;
+      }
+
+      document.getElementById('stat-month-workouts').innerText = mWorkouts;
+      document.getElementById('stat-month-weights').innerText = `${mWeights}m`;
+      document.getElementById('stat-month-cardio').innerText = `${mCardio}m`;
+    }
+
+    function changeMonth(delta) {
+      state.selectedMonth += delta;
+      if(state.selectedMonth < 0) { state.selectedMonth = 11; state.selectedYear--; }
+      if(state.selectedMonth > 11) { state.selectedMonth = 0; state.selectedYear++; }
+      renderCalendar();
+    }
+
+    function getWorkoutsInWeek(weekNum) {
+      const start = new Date(state.challengeStartDate);
+      const wStart = new Date(start.setDate(start.getDate() + (weekNum - 1) * 7));
+      const wEnd = new Date(wStart);
+      wEnd.setDate(wEnd.getDate() + 7);
+
+      return Object.keys(state.logs).filter(dateStr => {
+        const d = new Date(dateStr);
+        return d >= wStart && d < wEnd;
+      }).length;
+    }
+
+    function getConsecutiveWeeks(logs) {
+      let count = 0;
+      for(let w=1; w<=6; w++) {
+        if(getWorkoutsInWeek(w) >= 3) count++;
+        else break;
+      }
+      return count;
+    }
+
+    function churroMeow() {
+      playSynthChime();
+      const meows = [
+        "Meow! What are you in the mood for today? Peloton Lower Body or Peloton Upper Body? 🐾",
+        "Purrr... You're doing amazing! Let's get that workout in! 🔥",
+        "Meow! 3x a week is our goal — you've got this! ✨"
+      ];
+      document.getElementById('churro-dialogue').innerText = meows[Math.floor(Math.random() * meows.length)];
+    }
+
+    function switchTab(tab) {
+      ['tracker', 'calendar', 'badges'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`btn-tab-${t}`);
+        btn.classList.remove('bg-churro-orange', 'text-white');
+        btn.classList.add('bg-orange-100', 'text-churro-dark');
+      });
+
+      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`btn-tab-${tab}`);
+      activeBtn.classList.remove('bg-orange-100', 'text-churro-dark');
+      activeBtn.classList.add('bg-churro-orange', 'text-white');
+    }
+
+    function playSynthChime() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.3);
+      } catch(e){}
+    }
+  </script>
+</body>
+</html>
