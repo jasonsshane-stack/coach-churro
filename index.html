@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Coach Churro Workout Tracker</title>
+  <title>Coach Churro</title>
   
-  <!-- Apple & PWA Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Coach Churro">
-  <meta name="theme-color" content="#FAF6F0">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23FAF6F0'/><circle cx='50' cy='50' r='38' fill='%23F4E0A5'/><text x='50' y='62' font-size='42' text-anchor='middle'>🐾</text></svg>">
+  <meta name="theme-color" content="#FFF9F5">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23FFF9F5'/><circle cx='50' cy='50' r='38' fill='%23FFD8C9'/><text x='50' y='62' font-size='42' text-anchor='middle'>🐾</text></svg>">
 
-  <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -22,20 +20,18 @@
       theme: {
         extend: {
           colors: {
-            churro: {
-              cream: '#FAF6F0',
-              card: '#FFFBF7',
-              orange: '#E07A5F',
-              gold: '#F4A261',
-              peach: '#F4E0A5',
-              dark: '#3D405B',
-              rose: '#E8A598',
-              emerald: '#81B29A',
-              purple: '#9B5DE5'
+            app: {
+              bg: '#FFF9F5',
+              card: '#FFFFFF',
+              border: '#FFE4D6',
+              primary: '#FF5E3A',
+              primaryDark: '#D94321',
+              gold: '#FFB300',
+              blue: '#1CB0F6',
+              purple: '#AF52DE',
+              text: '#2C221E',
+              subtext: '#6A5B53'
             }
-          },
-          fontFamily: {
-            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif']
           }
         }
       }
@@ -44,556 +40,281 @@
 
   <style>
     body {
-      background-color: #FAF6F0;
-      color: #3D405B;
+      background-color: #FFF9F5;
+      color: #2C221E;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      display: none;
+    .btn-3d-primary {
+      background-color: #FF5E3A;
+      box-shadow: 0 6px 0 #D94321;
     }
-    .custom-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .btn-3d-primary:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #D94321;
     }
-    @keyframes tailWag {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(12deg); }
+    .btn-3d-card {
+      background-color: #FFFFFF;
+      border: 2px solid #FFE4D6;
+      box-shadow: 0 4px 0 #F5D0BC;
     }
-    .wagging-tail {
-      transform-origin: bottom left;
-      animation: tailWag 2.5s ease-in-out infinite;
+    .btn-3d-card:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #F5D0BC;
     }
-    @keyframes earTwitch {
-      0%, 90%, 100% { transform: rotate(0deg); }
-      93% { transform: rotate(-6deg); }
-      96% { transform: rotate(4deg); }
-    }
-    .twitching-ear {
-      transform-origin: bottom center;
-      animation: earTwitch 4s infinite;
-    }
-    @keyframes floatBubble {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
-    }
-    .floating-bubble {
-      animation: floatBubble 3s ease-in-out infinite;
+    .btn-3d-card-selected {
+      background-color: #FFF2EC;
+      border: 3px solid #FF5E3A;
+      box-shadow: 0 4px 0 #D94321;
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col max-w-md mx-auto relative shadow-2xl bg-churro-cream pb-12">
+<body class="min-h-screen flex flex-col max-w-md mx-auto relative bg-app-bg pb-28 shadow-2xl">
 
-  <!-- Header Navigation -->
-  <header class="pt-10 pb-4 px-6 flex items-center justify-between border-b border-orange-100 bg-churro-card sticky top-0 z-30 shadow-sm">
+  <!-- Top Header: Clean & Big -->
+  <header class="pt-12 pb-4 px-6 flex items-center justify-between border-b-2 border-app-border bg-app-bg sticky top-0 z-30">
     <div class="flex items-center space-x-2">
       <span class="text-2xl">🐾</span>
-      <div>
-        <h1 class="font-black text-xl text-churro-dark tracking-tight leading-none">COACH CHURRO</h1>
-        <p class="text-xs text-orange-600 font-semibold mt-0.5">3x/Week Fitness Challenge</p>
-      </div>
+      <h1 class="text-xl font-black text-app-text tracking-wide">COACH CHURRO</h1>
     </div>
-    <div class="flex items-center space-x-2">
-      <button onclick="switchTab('tracker')" id="btn-tab-tracker" class="px-3 py-1.5 rounded-full text-xs font-bold bg-churro-orange text-white shadow-sm transition">Tracker</button>
-      <button onclick="switchTab('calendar')" id="btn-tab-calendar" class="px-3 py-1.5 rounded-full text-xs font-bold bg-orange-100 text-churro-dark hover:bg-orange-200 transition">Calendar</button>
-      <button onclick="switchTab('badges')" id="btn-tab-badges" class="px-3 py-1.5 rounded-full text-xs font-bold bg-orange-100 text-churro-dark hover:bg-orange-200 transition">Badges</button>
+
+    <div class="bg-app-card px-4 py-2 rounded-2xl border-2 border-app-border shadow-sm flex items-center space-x-2">
+      <span class="text-lg">🎯</span>
+      <span id="header-total" class="text-base font-black text-app-primary">0/18</span>
     </div>
   </header>
 
-  <!-- TAB 1: MAIN TRACKER VIEW -->
-  <main id="view-tracker" class="p-5 space-x-0 space-y-5 flex-1">
-
-    <!-- Coach Churro Mascot & Speech Card -->
-    <div class="bg-churro-card rounded-3xl p-5 border-2 border-orange-200/60 shadow-md relative overflow-hidden flex flex-col items-center">
-      
-      <div class="w-full flex items-center justify-between mb-2">
-        <div class="flex items-center space-x-1.5 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">
-          <span class="text-xs">🔥</span>
-          <span id="streak-counter" class="text-xs font-black text-amber-800">0 Week Streak</span>
-        </div>
-        <div id="level-badge" class="flex items-center space-x-1.5 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">
-          <span class="text-xs">🏷️</span>
-          <span id="level-text" class="text-xs font-black text-purple-900">Level 1: Headband</span>
-        </div>
-      </div>
-
-      <!-- Interactive SVG Coach Churro (Calico Cat) -->
-      <div class="relative w-40 h-40 my-1 cursor-pointer group" onclick="churroMeow()">
+  <!-- TAB 1: MAIN HOME (6-WEEK QUEST PATH) -->
+  <main id="tab-home" class="p-6 flex-1 flex flex-col items-center space-y-6">
+    
+    <!-- Coach Churro Mascot Banner -->
+    <div class="w-full bg-app-card border-2 border-app-border rounded-3xl p-5 relative flex items-center space-x-5 shadow-md">
+      <div class="w-24 h-24 flex-shrink-0 cursor-pointer" onclick="churroMeow()">
         <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
-          <!-- Tail -->
-          <path class="wagging-tail" d="M 145 130 C 175 120, 185 80, 165 60 C 155 50, 145 65, 152 75 C 162 90, 155 115, 138 125 Z" fill="#3D405B" />
-          <path class="wagging-tail" d="M 160 65 C 165 60, 175 62, 170 72 C 165 80, 155 85, 152 75 Z" fill="#E07A5F" />
-
-          <!-- Body (Fluffy Calico) -->
-          <ellipse cx="100" cy="135" rx="55" ry="45" fill="#FAF6F0" stroke="#3D405B" stroke-width="3" />
-          <!-- Dark Patch Left -->
-          <path d="M 50 120 Q 70 110 65 145 Q 48 150 50 120 Z" fill="#3D405B" />
-          <!-- Orange Patch Right -->
-          <path d="M 135 110 Q 150 130 130 155 Q 120 135 135 110 Z" fill="#E07A5F" />
-
-          <!-- Paws -->
-          <ellipse cx="75" cy="172" rx="12" ry="8" fill="#FFF" stroke="#3D405B" stroke-width="2.5" />
-          <ellipse cx="125" cy="172" rx="12" ry="8" fill="#FFF" stroke="#3D405B" stroke-width="2.5" />
-
-          <!-- Head -->
-          <circle cx="100" cy="85" r="42" fill="#FAF6F0" stroke="#3D405B" stroke-width="3" />
-
-          <!-- Calico Face Markings -->
-          <!-- Left Dark Patch -->
-          <path d="M 60 70 Q 80 60 75 90 Q 60 92 60 70 Z" fill="#3D405B" />
-          <!-- Right Orange Patch -->
-          <path d="M 140 70 Q 120 60 125 90 Q 140 92 140 70 Z" fill="#E07A5F" />
-          <!-- White Chest & Muzzle -->
+          <path d="M 145 130 C 175 120, 185 80, 165 60 C 155 50, 145 65, 152 75 C 162 90, 155 115, 138 125 Z" fill="#2C221E" />
+          <ellipse cx="100" cy="135" rx="55" ry="45" fill="#FFF9F5" stroke="#2C221E" stroke-width="3" />
+          <path d="M 50 120 Q 70 110 65 145 Q 48 150 50 120 Z" fill="#2C221E" />
+          <path d="M 135 110 Q 150 130 130 155 Q 120 135 135 110 Z" fill="#FF5E3A" />
+          <ellipse cx="75" cy="172" rx="12" ry="8" fill="#FFF" stroke="#2C221E" stroke-width="2.5" />
+          <ellipse cx="125" cy="172" rx="12" ry="8" fill="#FFF" stroke="#2C221E" stroke-width="2.5" />
+          <circle cx="100" cy="85" r="42" fill="#FFF9F5" stroke="#2C221E" stroke-width="3" />
+          <path d="M 60 70 Q 80 60 75 90 Q 60 92 60 70 Z" fill="#2C221E" />
+          <path d="M 140 70 Q 120 60 125 90 Q 140 92 140 70 Z" fill="#FF5E3A" />
           <path d="M 85 90 Q 100 80 115 90 Q 110 115 90 115 Z" fill="#FFFFFF" />
-
-          <!-- Ears -->
-          <path class="twitching-ear" d="M 65 55 L 50 22 L 80 48 Z" fill="#E07A5F" stroke="#3D405B" stroke-width="2.5" />
-          <path class="twitching-ear" d="M 135 55 L 150 22 L 120 48 Z" fill="#3D405B" stroke="#3D405B" stroke-width="2.5" />
-          <path class="twitching-ear" d="M 67 50 L 56 28 L 76 46 Z" fill="#E8A598" />
-
-          <!-- Eyes (Soft Green) -->
-          <ellipse cx="82" cy="82" rx="7" ry="9" fill="#81B29A" stroke="#3D405B" stroke-width="2" />
-          <ellipse cx="118" cy="82" rx="7" ry="9" fill="#81B29A" stroke="#3D405B" stroke-width="2" />
+          <path d="M 65 55 L 50 22 L 80 48 Z" fill="#FF5E3A" stroke="#2C221E" stroke-width="2.5" />
+          <path d="M 135 55 L 150 22 L 120 48 Z" fill="#2C221E" stroke="#2C221E" stroke-width="2.5" />
+          <ellipse cx="82" cy="82" rx="7" ry="9" fill="#81B29A" stroke="#2C221E" stroke-width="2" />
+          <ellipse cx="118" cy="82" rx="7" ry="9" fill="#81B29A" stroke="#2C221E" stroke-width="2" />
           <circle cx="80" cy="80" r="2.5" fill="#FFF" />
           <circle cx="116" cy="80" r="2.5" fill="#FFF" />
-
-          <!-- Nose & Whiskers -->
           <polygon points="100,92 95,87 105,87" fill="#E8A598" />
-          <path d="M 100 92 L 100 97 Q 94 102 88 98 M 100 97 Q 106 102 112 98" fill="none" stroke="#3D405B" stroke-width="2" stroke-linecap="round" />
-          <!-- Whiskers -->
-          <line x1="60" y1="88" x2="40" y2="84" stroke="#3D405B" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="60" y1="94" x2="38" y2="95" stroke="#3D405B" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="140" y1="88" x2="160" y2="84" stroke="#3D405B" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="140" y1="94" x2="162" y2="95" stroke="#3D405B" stroke-width="1.5" stroke-linecap="round" />
-
-          <!-- Dynamic Accessories Based on Level -->
-          <!-- Level 1+: Athletic Headband -->
-          <g id="acc-headband">
-            <path d="M 60 52 Q 100 42 140 52" fill="none" stroke="#E07A5F" stroke-width="9" stroke-linecap="round" />
-            <path d="M 60 52 Q 100 42 140 52" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" />
-          </g>
-
-          <!-- Level 2+: Gold Medal Collar -->
-          <g id="acc-medal" class="hidden">
-            <path d="M 75 125 Q 100 140 125 125" fill="none" stroke="#E07A5F" stroke-width="4" />
-            <circle cx="100" cy="138" r="9" fill="#F4A261" stroke="#3D405B" stroke-width="1.5" />
-            <text x="100" y="141" font-size="9" text-anchor="middle" fill="#3D405B" font-weight="bold">★</text>
-          </g>
-
-          <!-- Level 3+: Wrist Sweatbands & Trophy -->
-          <g id="acc-sweatbands" class="hidden">
-            <rect x="67" y="166" width="16" height="6" rx="2" fill="#E07A5F" />
-            <rect x="117" y="166" width="16" height="6" rx="2" fill="#E07A5F" />
-          </g>
-
-          <!-- Level 4: Champion Crown & Cape -->
-          <g id="acc-crown" class="hidden">
-            <!-- Cape -->
-            <path d="M 60 115 Q 100 125 140 115 L 155 165 Q 100 175 45 165 Z" fill="#E07A5F" opacity="0.85" />
-            <!-- Crown -->
-            <polygon points="85,42 90,25 97,35 100,20 103,35 110,25 115,42" fill="#F4A261" stroke="#3D405B" stroke-width="1.5" />
-            <circle cx="100" cy="20" r="2.5" fill="#E07A5F" />
-          </g>
+          <path d="M 100 92 L 100 97 Q 94 102 88 98 M 100 97 Q 106 102 112 98" fill="none" stroke="#2C221E" stroke-width="2" />
+          <path d="M 60 52 Q 100 42 140 52" fill="none" stroke="#FFB300" stroke-width="10" stroke-linecap="round" />
+          <path d="M 60 52 Q 100 42 140 52" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" />
         </svg>
       </div>
 
-      <!-- Speech Bubble -->
-      <div class="floating-bubble bg-orange-50 border-2 border-orange-200 rounded-2xl p-3 text-center relative w-full mt-2 shadow-sm">
-        <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-4 h-4 bg-orange-50 border-t-2 border-l-2 border-orange-200 rotate-45"></div>
-        <p id="churro-dialogue" class="text-xs font-bold text-churro-dark leading-relaxed">
-          "What are you in the mood for today? A Peloton session or a quick reset? Purr-fect time to move! 🐾"
-        </p>
+      <div class="flex-1 space-y-1">
+        <p class="text-xs font-black text-app-primary uppercase tracking-wider">6-Week Challenge</p>
+        <h2 id="quest-title" class="text-lg font-black text-app-text">Week 1: First Steps</h2>
+        <p id="churro-dialogue" class="text-sm font-bold text-app-subtext leading-snug">"3 workouts needed to clear Week 1! You've got this! 🐾"</p>
       </div>
     </div>
 
-    <!-- 6-Week Challenge Overview Card -->
-    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <i data-lucide="trophy" class="w-5 h-5 text-churro-orange"></i>
-          <h2 class="font-black text-sm text-churro-dark uppercase tracking-wider">6-Week Challenge Progress</h2>
-        </div>
-        <span id="challenge-count" class="text-xs font-extrabold text-churro-orange bg-orange-100 px-2.5 py-1 rounded-full">0 / 18 Workouts</span>
+    <!-- 6-Week Quest Roadmap -->
+    <div class="w-full space-y-4">
+      <div class="flex items-center justify-between px-1">
+        <span class="text-sm font-black text-app-subtext uppercase tracking-wider">Challenge Roadmap</span>
+        <span id="roadmap-pct" class="text-sm font-black text-app-primary">0% Done</span>
       </div>
 
-      <!-- Progress Bar -->
-      <div class="w-full bg-orange-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-orange-200">
-        <div id="challenge-bar" class="bg-gradient-to-r from-churro-gold to-churro-orange h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-      </div>
-
-      <!-- 6 Week Badge Dots -->
-      <div class="grid grid-cols-6 gap-1.5 pt-1" id="week-dots-grid">
-        <!-- Javascript renders 6 week status cards -->
+      <div id="quest-path-container" class="space-y-3">
+        <!-- Rendered via JS -->
       </div>
     </div>
 
-    <!-- Quick Logging Action Card -->
-    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-4">
-      <h2 class="font-black text-sm text-churro-dark uppercase tracking-wider flex items-center justify-between">
-        <span>Log Today's Workout</span>
-        <span id="today-date-str" class="text-xs font-normal text-gray-500">Today</span>
-      </h2>
+    <!-- Large 3D Primary Button -->
+    <button onclick="openLogModal()" class="w-full py-5 rounded-2xl font-black text-lg uppercase tracking-wider text-white btn-3d-primary transition flex items-center justify-center space-x-3 mt-2">
+      <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+      <span>LOG TODAY's WORKOUT</span>
+    </button>
+  </main>
 
-      <!-- Peloton Mood Selector -->
-      <div class="space-y-1.5">
-        <label class="text-xs font-bold text-gray-600">Peloton / Workout Focus:</label>
-        <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-          <button onclick="selectFocus('Peloton Lower Body')" class="focus-btn p-2 rounded-xl border border-gray-200 text-left hover:border-churro-orange transition flex items-center justify-between">
-            <span>Peloton Lower Body</span>
-            <span class="text-sm">🦵</span>
+  <!-- TAB 2: STATS -->
+  <main id="tab-progress" class="p-6 space-y-6 flex-1 hidden">
+    <div class="bg-app-card border-2 border-app-border rounded-3xl p-6 space-y-4 shadow-sm">
+      <h3 class="font-black text-sm text-app-subtext uppercase tracking-wider">Total Active Stats</h3>
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div class="p-4 bg-app-bg rounded-2xl border-2 border-app-border">
+          <p class="text-2xl font-black text-app-primary" id="stat-total-workouts">0</p>
+          <p class="text-xs font-black text-app-subtext uppercase mt-1">Workouts</p>
+        </div>
+        <div class="p-4 bg-app-bg rounded-2xl border-2 border-app-border">
+          <p class="text-2xl font-black text-app-purple" id="stat-weights-min">0m</p>
+          <p class="text-xs font-black text-app-subtext uppercase mt-1">Weights</p>
+        </div>
+        <div class="p-4 bg-app-bg rounded-2xl border-2 border-app-border">
+          <p class="text-2xl font-black text-app-gold" id="stat-cardio-min">0m</p>
+          <p class="text-xs font-black text-app-subtext uppercase mt-1">Cardio</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 3: BADGES -->
+  <main id="tab-badges" class="p-6 space-y-5 flex-1 hidden">
+    <div class="flex items-center justify-between">
+      <h2 class="font-black text-sm text-app-subtext uppercase tracking-wider">Milestone Badges</h2>
+      <span id="badge-count" class="text-xs font-black text-app-primary">0 / 10 Unlocked</span>
+    </div>
+    <div class="grid grid-cols-1 gap-3" id="badges-grid">
+      <!-- Rendered via JS -->
+    </div>
+  </main>
+
+  <!-- LOGGING MODAL SHEET -->
+  <div id="log-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex flex-col justify-end hidden">
+    <div class="bg-app-card border-t-4 border-app-border rounded-t-3xl p-6 space-y-6 max-w-md mx-auto w-full shadow-2xl pb-10">
+      <div class="flex items-center justify-between border-b-2 border-app-border pb-4">
+        <h3 class="text-xl font-black text-app-text">Log Workout</h3>
+        <button onclick="closeLogModal()" class="text-app-subtext font-black text-base">Cancel</button>
+      </div>
+
+      <div class="space-y-3">
+        <label class="text-xs font-black text-app-subtext uppercase tracking-wider">1. Focus Area</label>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="selectModalFocus('Peloton Lower Body')" class="modal-focus-btn btn-3d-card p-4 rounded-2xl text-left text-sm font-black flex justify-between items-center">
+            <span>Peloton Lower</span><span class="text-lg">🦵</span>
           </button>
-          <button onclick="selectFocus('Peloton Upper Body')" class="focus-btn p-2 rounded-xl border border-gray-200 text-left hover:border-churro-orange transition flex items-center justify-between">
-            <span>Peloton Upper Body</span>
-            <span class="text-sm">💪</span>
+          <button onclick="selectModalFocus('Peloton Upper Body')" class="modal-focus-btn btn-3d-card p-4 rounded-2xl text-left text-sm font-black flex justify-between items-center">
+            <span>Peloton Upper</span><span class="text-lg">💪</span>
           </button>
-          <button onclick="selectFocus('Peloton Full Body')" class="focus-btn p-2 rounded-xl border border-gray-200 text-left hover:border-churro-orange transition flex items-center justify-between">
-            <span>Peloton Full Body</span>
-            <span class="text-sm">🔥</span>
+          <button onclick="selectModalFocus('Peloton Full Body')" class="modal-focus-btn btn-3d-card p-4 rounded-2xl text-left text-sm font-black flex justify-between items-center">
+            <span>Peloton Full</span><span class="text-lg">🔥</span>
           </button>
-          <button onclick="selectFocus('Peloton Arms & Core')" class="focus-btn p-2 rounded-xl border border-gray-200 text-left hover:border-churro-orange transition flex items-center justify-between">
-            <span>Peloton Arms & Core</span>
-            <span class="text-sm">✨</span>
+          <button onclick="selectModalFocus('Peloton Arms & Core')" class="modal-focus-btn btn-3d-card p-4 rounded-2xl text-left text-sm font-black flex justify-between items-center">
+            <span>Arms & Core</span><span class="text-lg">✨</span>
           </button>
         </div>
       </div>
 
-      <!-- Checkboxes for Weights & Cardio -->
-      <div class="space-y-3 pt-2">
-        <!-- Weight Training Checkbox -->
-        <div class="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-100 flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <input type="checkbox" id="check-weights" onchange="toggleWorkoutType('weights')" class="w-6 h-6 rounded-lg text-churro-purple focus:ring-purple-400">
-            <div>
-              <p class="font-black text-sm text-purple-950">Weight Training</p>
-              <p class="text-xs text-purple-700">Dumbbells & Cable System</p>
-            </div>
-          </div>
-          <select id="duration-weights" class="text-xs font-bold bg-white border border-purple-200 rounded-lg px-2 py-1 text-purple-900">
-            <option value="10">10 Min</option>
-            <option value="15">15 Min</option>
-            <option value="20" selected>20 Min</option>
-            <option value="25">25 Min</option>
-            <option value="30">30 Min</option>
-          </select>
-        </div>
-
-        <!-- Cardio Checkbox -->
-        <div class="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <input type="checkbox" id="check-cardio" onchange="toggleWorkoutType('cardio')" class="w-6 h-6 rounded-lg text-churro-rose focus:ring-rose-400">
-            <div>
-              <p class="font-black text-sm text-rose-950">Cardio / Peloton Bike</p>
-              <p class="text-xs text-rose-700">Spin, Bike, or Run</p>
-            </div>
-          </div>
-          <select id="duration-cardio" class="text-xs font-bold bg-white border border-rose-200 rounded-lg px-2 py-1 text-rose-900">
-            <option value="10">10 Min</option>
-            <option value="15">15 Min</option>
-            <option value="20" selected>20 Min</option>
-            <option value="25">25 Min</option>
-            <option value="30">30 Min</option>
-          </select>
+      <div class="space-y-3">
+        <label class="text-xs font-black text-app-subtext uppercase tracking-wider">2. Type & Duration</label>
+        <div class="grid grid-cols-2 gap-3">
+          <button id="btn-toggle-weights" onclick="toggleModalType('weights')" class="btn-3d-card btn-3d-card-selected p-4 rounded-2xl text-left text-sm font-black flex items-center space-x-2">
+            <span>🏋️ Weights (20m)</span>
+          </button>
+          <button id="btn-toggle-cardio" onclick="toggleModalType('cardio')" class="btn-3d-card p-4 rounded-2xl text-left text-sm font-black flex items-center space-x-2">
+            <span>🚴 Cardio (20m)</span>
+          </button>
         </div>
       </div>
 
-      <!-- Complete Button -->
-      <button onclick="logWorkoutSubmit()" class="w-full py-3.5 bg-churro-orange hover:bg-orange-600 active:scale-95 text-white font-black rounded-2xl shadow-lg shadow-orange-200 transition duration-150 flex items-center justify-center space-x-2 text-sm">
-        <i data-lucide="check-circle-2" class="w-5 h-5"></i>
-        <span>LOG TODAY'S WORKOUT</span>
+      <button onclick="submitModalLog()" class="w-full py-5 rounded-2xl font-black text-lg uppercase tracking-wider text-white btn-3d-primary transition mt-3">
+        SAVE WORKOUT
       </button>
     </div>
+  </div>
 
-    <!-- Current Week Tracker -->
-    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <h2 class="font-black text-sm text-churro-dark uppercase tracking-wider">This Week's Target (3x Goal)</h2>
-        <span id="this-week-count" class="text-xs font-bold text-churro-dark">0 / 3 Done</span>
-      </div>
-      <div class="grid grid-cols-7 gap-1.5 text-center" id="weekly-days-grid">
-        <!-- Rendered by JavaScript -->
-      </div>
-    </div>
-  </main>
-
-  <!-- TAB 2: MONTHLY CALENDAR VIEW -->
-  <main id="view-calendar" class="p-5 space-y-5 flex-1 hidden">
-    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-4">
-      <div class="flex items-center justify-between">
-        <button onclick="changeMonth(-1)" class="p-2 rounded-xl bg-orange-100 text-churro-dark font-bold text-xs">← Prev</button>
-        <h2 id="calendar-month-title" class="font-black text-base text-churro-dark">October 2026</h2>
-        <button onclick="changeMonth(1)" class="p-2 rounded-xl bg-orange-100 text-churro-dark font-bold text-xs">Next →</button>
-      </div>
-
-      <!-- Calendar Grid -->
-      <div class="grid grid-cols-7 gap-1 text-center font-bold text-xs text-gray-400 pb-1">
-        <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
-      </div>
-      <div id="calendar-days-grid" class="grid grid-cols-7 gap-1 text-center text-xs">
-        <!-- Rendered by JS -->
-      </div>
-
-      <div class="flex items-center justify-center space-x-4 pt-3 border-t border-gray-100 text-xs font-semibold">
-        <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span><span>Weights</span></div>
-        <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span><span>Cardio</span></div>
-        <div class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span><span>Both</span></div>
-      </div>
-    </div>
-
-    <!-- Monthly Summary Stats -->
-    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-3">
-      <h3 class="font-black text-sm text-churro-dark uppercase tracking-wider">Monthly Totals</h3>
-      <div class="grid grid-cols-3 gap-2 text-center">
-        <div class="p-3 bg-orange-50 rounded-2xl border border-orange-100">
-          <p class="text-xl font-black text-churro-orange" id="stat-month-workouts">0</p>
-          <p class="text-[10px] font-bold text-gray-500 uppercase mt-0.5">Workouts</p>
-        </div>
-        <div class="p-3 bg-purple-50 rounded-2xl border border-purple-100">
-          <p class="text-xl font-black text-purple-700" id="stat-month-weights">0m</p>
-          <p class="text-[10px] font-bold text-gray-500 uppercase mt-0.5">Weights</p>
-        </div>
-        <div class="p-3 bg-rose-50 rounded-2xl border border-rose-100">
-          <p class="text-xl font-black text-rose-700" id="stat-month-cardio">0m</p>
-          <p class="text-[10px] font-bold text-gray-500 uppercase mt-0.5">Cardio</p>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- TAB 3: BADGES & ACHIEVEMENTS -->
-  <main id="view-badges" class="p-5 space-y-5 flex-1 hidden">
-    <div class="bg-churro-card rounded-3xl p-5 border border-orange-100 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <h2 class="font-black text-sm text-churro-dark uppercase tracking-wider">Milestone Badges</h2>
-        <span id="badges-unlocked-count" class="text-xs font-bold text-churro-orange bg-orange-100 px-2.5 py-1 rounded-full">0 / 8 Unlocked</span>
-      </div>
-      <p class="text-xs text-gray-500">Tap any badge to see how Coach Churro awarded it!</p>
-
-      <div class="grid grid-cols-2 gap-3 pt-2" id="badges-grid">
-        <!-- Rendered by JS -->
-      </div>
-    </div>
-  </main>
+  <!-- Bottom Navigation Bar -->
+  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-app-card border-t-2 border-app-border px-8 py-4 flex justify-around z-40 shadow-lg">
+    <button onclick="switchTab('home')" id="nav-btn-home" class="flex flex-col items-center text-app-primary">
+      <i data-lucide="home" class="w-7 h-7"></i>
+      <span class="text-xs font-black mt-1 uppercase">Home</span>
+    </button>
+    <button onclick="switchTab('progress')" id="nav-btn-progress" class="flex flex-col items-center text-app-subtext">
+      <i data-lucide="bar-chart-2" class="w-7 h-7"></i>
+      <span class="text-xs font-black mt-1 uppercase">Stats</span>
+    </button>
+    <button onclick="switchTab('badges')" id="nav-btn-badges" class="flex flex-col items-center text-app-subtext">
+      <i data-lucide="award" class="w-7 h-7"></i>
+      <span class="text-xs font-black mt-1 uppercase">Badges</span>
+    </button>
+  </nav>
 
   <script>
-    // State Management
     let state = {
       logs: JSON.parse(localStorage.getItem('churro_logs') || '{}'),
-      currentFocus: '',
-      challengeStartDate: localStorage.getItem('churro_start_date') || new Date().toISOString().split('T')[0],
-      selectedMonth: new Date().getMonth(),
-      selectedYear: new Date().getFullYear()
+      selectedFocus: 'Peloton Full Body',
+      hasWeights: true,
+      hasCardio: false,
+      challengeStartDate: localStorage.getItem('churro_start_date') || new Date().toISOString().split('T')[0]
     };
 
     const BADGES = [
-      { id: 'first_step', title: 'First Paw Forward', icon: '🐾', desc: 'Logged your very 1st workout!', check: (logs) => Object.keys(logs).length >= 1 },
-      { id: 'peloton_fan', title: 'Peloton Enthusiast', icon: '🚴‍♀️', desc: 'Completed 5 Peloton sessions', check: (logs) => Object.values(logs).filter(l => l.focus && l.focus.includes('Peloton')).length >= 5 },
-      { id: 'streak_2w', title: 'Streak Legend', icon: '🔥', desc: 'Completed 3x workouts for 2 weeks', check: (logs) => getConsecutiveWeeks(logs) >= 2 },
-      { id: 'quick_hit', title: 'Quick Hit Specialist', icon: '⚡', desc: 'Completed 5 quick 10-15 min sessions', check: (logs) => Object.values(logs).filter(l => (l.wMin && l.wMin <= 15) || (l.cMin && l.cMin <= 15)).length >= 5 },
-      { id: 'combo_master', title: 'Strength & Cardio', icon: '🏋️‍♀️', desc: 'Logged both Weights & Cardio in 1 day', check: (logs) => Object.values(logs).some(l => l.weights && l.cardio) },
-      { id: 'halfway', title: 'Halfway Purr-fect', icon: '🏆', desc: 'Completed 9 challenge workouts', check: (logs) => Object.keys(logs).length >= 9 },
-      { id: 'weekend', title: 'Weekend Warrior', icon: '🌅', desc: 'Worked out on a Saturday or Sunday', check: (logs) => Object.keys(logs).some(d => { let day = new Date(d).getDay(); return day === 0 || day === 6; }) },
-      { id: 'champion', title: '6-Week Champion', icon: '👑', desc: 'Completed all 18 challenge workouts!', check: (logs) => Object.keys(logs).length >= 18 }
+      { id: 'first_step', title: 'First Paw Forward', icon: '🐾', desc: 'Completed 1st workout!', check: (logs) => Object.keys(logs).length >= 1 },
+      { id: 'strength_warrior', title: 'Strength Warrior', icon: '💪', desc: 'Completed 5 Strength sessions', check: (logs) => Object.values(logs).filter(l => l.weights).length >= 5 },
+      { id: 'double_trouble', title: 'Double Trouble', icon: '🏋️‍♀️', desc: 'Logged Weights & Cardio in 1 day', check: (logs) => Object.values(logs).some(l => l.weights && l.cardio) },
+      { id: 'weekend_pawty', title: 'Weekend Paw-ty', icon: '🌅', desc: 'Worked out on a weekend', check: (logs) => Object.keys(logs).some(d => { let day = new Date(d).getDay(); return day === 0 || day === 6; }) },
+      { id: 'streak_2w', title: 'Streak Legend', icon: '🔥', desc: 'Hit 3x workouts for 2 weeks', check: (logs) => Object.keys(logs).length >= 6 },
+      { id: 'arms_core', title: 'Arms & Core Ace', icon: '✨', desc: 'Completed 5 Upper Body/Core workouts', check: (logs) => Object.values(logs).filter(l => l.focus && (l.focus.includes('Upper') || l.focus.includes('Arms'))).length >= 5 },
+      { id: 'halfway', title: 'Halfway Purr-fect', icon: '🏆', desc: 'Cleared Week 3 of the challenge', check: (logs) => Object.keys(logs).length >= 9 },
+      { id: 'queen', title: 'Consistency Queen', icon: '👑', desc: 'Logged 12 total workouts', check: (logs) => Object.keys(logs).length >= 12 },
+      { id: 'quick_hit', title: 'Quick Hit Specialist', icon: '⚡', desc: 'Logged 5 quick sessions', check: (logs) => Object.keys(logs).length >= 5 },
+      { id: 'champion', title: '6-Week Champion', icon: '🏅', desc: 'Completed all 18 workouts!', check: (logs) => Object.keys(logs).length >= 18 }
     ];
 
-    // Initialize
     document.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
-      document.getElementById('today-date-str').innerText = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
       renderApp();
     });
 
     function saveState() {
       localStorage.setItem('churro_logs', JSON.stringify(state.logs));
-      localStorage.setItem('churro_start_date', state.challengeStartDate);
       renderApp();
     }
 
     function renderApp() {
-      renderTracker();
-      renderCalendar();
-      renderBadges();
-      updateLevelAndOutfit();
-    }
-
-    function selectFocus(focusText) {
-      state.currentFocus = focusText;
-      document.querySelectorAll('.focus-btn').forEach(btn => {
-        if(btn.innerText.includes(focusText)) {
-          btn.classList.add('border-churro-orange', 'bg-orange-50');
-        } else {
-          btn.classList.remove('border-churro-orange', 'bg-orange-50');
-        }
-      });
-    }
-
-    function toggleWorkoutType(type) {
-      // Handles checkbox toggles
-    }
-
-    function logWorkoutSubmit() {
-      const todayKey = new Date().toISOString().split('T')[0];
-      const hasWeights = document.getElementById('check-weights').checked;
-      const hasCardio = document.getElementById('check-cardio').checked;
-
-      if(!hasWeights && !hasCardio) {
-        alert("Please select Weights or Cardio to log!");
-        return;
-      }
-
-      state.logs[todayKey] = {
-        weights: hasWeights,
-        wMin: hasWeights ? parseInt(document.getElementById('duration-weights').value) : 0,
-        cardio: hasCardio,
-        cMin: hasCardio ? parseInt(document.getElementById('duration-cardio').value) : 0,
-        focus: state.currentFocus || 'Peloton Workout'
-      };
-
-      saveState();
-      playSynthChime();
-      confetti({ particleCount: 60, spread: 60, origin: { y: 0.7 } });
-
-      const praises = [
-        "Purr-fect effort today! You made time for yourself — that's how progress happens! 🐾",
-        "Strong work! Another step closer to your 3x weekly goal! 🔥",
-        "Consistency over perfection! You showed up and crushed it today! ✨",
-        "Coach Churro approved! So proud of your dedication today! 🎉"
-      ];
-      document.getElementById('churro-dialogue').innerText = praises[Math.floor(Math.random() * praises.length)];
-    }
-
-    function renderTracker() {
-      const totalWorkouts = Object.keys(state.logs).length;
-      document.getElementById('challenge-count').innerText = `${totalWorkouts} / 18 Workouts`;
-      const pct = Math.min(100, Math.round((totalWorkouts / 18) * 100));
-      document.getElementById('challenge-bar').style.width = `${pct}%`;
-
-      // Render 6-week dots
-      const dotsGrid = document.getElementById('week-dots-grid');
-      dotsGrid.innerHTML = '';
-      for(let w = 1; w <= 6; w++) {
-        const completedInWeek = getWorkoutsInWeek(w);
-        const isDone = completedInWeek >= 3;
-        dotsGrid.innerHTML += `
-          <div class="p-1.5 rounded-xl text-center ${isDone ? 'bg-emerald-100 border border-emerald-300 text-emerald-900' : 'bg-gray-100 text-gray-500'}">
-            <p class="text-[9px] font-black uppercase">Wk ${w}</p>
-            <p class="text-xs font-bold">${completedInWeek}/3</p>
-          </div>
-        `;
-      }
-
-      // Render this week days
-      const weeklyGrid = document.getElementById('weekly-days-grid');
-      weeklyGrid.innerHTML = '';
-      const days = ['S','M','T','W','T','F','S'];
-      const curr = new Date();
-      const first = curr.getDate() - curr.getDay();
-
-      let doneThisWeek = 0;
-      for(let i=0; i<7; i++) {
-        const dayDate = new Date(curr.setDate(first + i)).toISOString().split('T')[0];
-        const hasLog = !!state.logs[dayDate];
-        if(hasLog) doneThisWeek++;
-        weeklyGrid.innerHTML += `
-          <div class="p-2 rounded-xl ${hasLog ? 'bg-churro-orange text-white' : 'bg-gray-100 text-gray-400'}">
-            <p class="text-[10px] font-bold">${days[i]}</p>
-            <p class="text-xs font-black">${hasLog ? '✓' : '-'}</p>
-          </div>
-        `;
-      }
-      document.getElementById('this-week-count').innerText = `${doneThisWeek} / 3 Done`;
-    }
-
-    function updateLevelAndOutfit() {
       const total = Object.keys(state.logs).length;
-      let lvl = "Level 1: Headband";
+      document.getElementById('header-total').innerText = `${total}/18`;
+      document.getElementById('roadmap-pct').innerText = `${Math.min(100, Math.round((total/18)*100))}% Done`;
 
-      document.getElementById('acc-medal').classList.add('hidden');
-      document.getElementById('acc-sweatbands').classList.add('hidden');
-      document.getElementById('acc-crown').classList.add('hidden');
+      const container = document.getElementById('quest-path-container');
+      container.innerHTML = '';
 
-      if(total >= 18) {
-        lvl = "Level 4: Champion";
-        document.getElementById('acc-medal').classList.remove('hidden');
-        document.getElementById('acc-sweatbands').classList.remove('hidden');
-        document.getElementById('acc-crown').classList.remove('hidden');
-      } else if(total >= 12) {
-        lvl = "Level 3: Sweatbands";
-        document.getElementById('acc-medal').classList.remove('hidden');
-        document.getElementById('acc-sweatbands').classList.remove('hidden');
-      } else if(total >= 6) {
-        lvl = "Level 2: Gold Medal";
-        document.getElementById('acc-medal').classList.remove('hidden');
-      }
-      document.getElementById('level-text').innerText = lvl;
-    }
+      const titles = [
+        "Week 1: First Steps",
+        "Week 2: Building Momentum 🏅",
+        "Week 3: Halfway Mark 🏆",
+        "Week 4: Fitness Beast ⚡",
+        "Week 5: Home Stretch 🔥",
+        "Week 6: Champion Finish 👑"
+      ];
 
-    function renderBadges() {
-      const grid = document.getElementById('badges-grid');
-      grid.innerHTML = '';
-      let unlockedCount = 0;
+      for(let w=1; w<=6; w++) {
+        const workoutsInWk = getWorkoutsInWeek(w);
+        const isComplete = workoutsInWk >= 3;
 
-      BADGES.forEach(badge => {
-        const isUnlocked = badge.check(state.logs);
-        if(isUnlocked) unlockedCount++;
-        grid.innerHTML += `
-          <div onclick="alert('${badge.title}: ${badge.desc}')" class="p-3 rounded-2xl border ${isUnlocked ? 'bg-amber-50/80 border-amber-200 text-amber-950' : 'bg-gray-50 border-gray-200 opacity-50'} flex items-center space-x-3 cursor-pointer">
-            <span class="text-2xl">${badge.icon}</span>
-            <div>
-              <p class="text-xs font-black">${badge.title}</p>
-              <p class="text-[10px] text-gray-500">${isUnlocked ? 'Unlocked ✓' : 'Locked'}</p>
-            </div>
-          </div>
-        `;
-      });
-      document.getElementById('badges-unlocked-count').innerText = `${unlockedCount} / ${BADGES.length} Unlocked`;
-    }
-
-    function renderCalendar() {
-      const title = document.getElementById('calendar-month-title');
-      const grid = document.getElementById('calendar-days-grid');
-      const date = new Date(state.selectedYear, state.selectedMonth, 1);
-      title.innerText = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-      grid.innerHTML = '';
-      const firstDay = date.getDay();
-      const daysInMonth = new Date(state.selectedYear, state.selectedMonth + 1, 0).getDate();
-
-      for(let i=0; i<firstDay; i++) {
-        grid.innerHTML += `<div></div>`;
-      }
-
-      let mWorkouts = 0, mWeights = 0, mCardio = 0;
-
-      for(let d=1; d<=daysInMonth; d++) {
-        const key = `${state.selectedYear}-${String(state.selectedMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const log = state.logs[key];
-        let bg = 'bg-gray-50 text-gray-700';
-
-        if(log) {
-          mWorkouts++;
-          if(log.weights) mWeights += (log.wMin || 20);
-          if(log.cardio) mCardio += (log.cMin || 20);
-
-          if(log.weights && log.cardio) bg = 'bg-emerald-500 text-white font-black';
-          else if(log.weights) bg = 'bg-purple-500 text-white font-black';
-          else bg = 'bg-rose-500 text-white font-black';
+        let statusBg = "bg-app-card border-app-border";
+        let badgeIcon = "🔒";
+        if(isComplete) {
+          statusBg = "bg-app-card border-app-primary";
+          badgeIcon = "✓";
+        } else if(workoutsInWk > 0) {
+          statusBg = "bg-app-card border-app-gold";
+          badgeIcon = `${workoutsInWk}/3`;
         }
 
-        grid.innerHTML += `<div class="p-2 rounded-xl ${bg}">${d}</div>`;
+        container.innerHTML += `
+          <div class="p-4 rounded-2xl border-2 ${statusBg} flex items-center justify-between shadow-sm">
+            <div class="flex items-center space-x-4">
+              <div class="w-11 h-11 rounded-2xl ${isComplete ? 'bg-app-primary text-white' : 'bg-app-bg text-app-subtext'} flex items-center justify-center font-black text-base">
+                ${badgeIcon}
+              </div>
+              <div>
+                <p class="text-sm font-black ${isComplete ? 'text-app-primary' : 'text-app-text'}">${titles[w-1]}</p>
+                <p class="text-xs text-app-subtext font-bold mt-0.5">${workoutsInWk}/3 Workouts Completed</p>
+              </div>
+            </div>
+            ${w === 2 ? '<span class="text-base">🏅</span>' : w === 6 ? '<span class="text-base">👑</span>' : ''}
+          </div>
+        `;
       }
 
-      document.getElementById('stat-month-workouts').innerText = mWorkouts;
-      document.getElementById('stat-month-weights').innerText = `${mWeights}m`;
-      document.getElementById('stat-month-cardio').innerText = `${mCardio}m`;
-    }
-
-    function changeMonth(delta) {
-      state.selectedMonth += delta;
-      if(state.selectedMonth < 0) { state.selectedMonth = 11; state.selectedYear--; }
-      if(state.selectedMonth > 11) { state.selectedMonth = 0; state.selectedYear++; }
-      renderCalendar();
+      renderProgressTab();
+      renderBadgesTab();
     }
 
     function getWorkoutsInWeek(weekNum) {
@@ -608,54 +329,102 @@
       }).length;
     }
 
-    function getConsecutiveWeeks(logs) {
-      let count = 0;
-      for(let w=1; w<=6; w++) {
-        if(getWorkoutsInWeek(w) >= 3) count++;
-        else break;
-      }
-      return count;
+    function openLogModal() {
+      document.getElementById('log-modal').classList.remove('hidden');
     }
 
-    function churroMeow() {
-      playSynthChime();
-      const meows = [
-        "Meow! What are you in the mood for today? Peloton Lower Body or Peloton Upper Body? 🐾",
-        "Purrr... You're doing amazing! Let's get that workout in! 🔥",
-        "Meow! 3x a week is our goal — you've got this! ✨"
-      ];
-      document.getElementById('churro-dialogue').innerText = meows[Math.floor(Math.random() * meows.length)];
+    function closeLogModal() {
+      document.getElementById('log-modal').classList.add('hidden');
+    }
+
+    function selectModalFocus(focus) {
+      state.selectedFocus = focus;
+      document.querySelectorAll('.modal-focus-btn').forEach(btn => {
+        btn.classList.remove('btn-3d-card-selected');
+        if(btn.innerText.includes(focus.split(' ')[1] || focus)) {
+          btn.classList.add('btn-3d-card-selected');
+        }
+      });
+    }
+
+    function toggleModalType(type) {
+      if(type === 'weights') {
+        state.hasWeights = !state.hasWeights;
+        document.getElementById('btn-toggle-weights').classList.toggle('btn-3d-card-selected', state.hasWeights);
+      } else {
+        state.hasCardio = !state.hasCardio;
+        document.getElementById('btn-toggle-cardio').classList.toggle('btn-3d-card-selected', state.hasCardio);
+      }
+    }
+
+    function submitModalLog() {
+      const todayKey = new Date().toISOString().split('T')[0];
+      state.logs[todayKey] = {
+        weights: state.hasWeights,
+        wMin: state.hasWeights ? 20 : 0,
+        cardio: state.hasCardio,
+        cMin: state.hasCardio ? 20 : 0,
+        focus: state.selectedFocus
+      };
+
+      saveState();
+      closeLogModal();
+      confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
+    }
+
+    function renderProgressTab() {
+      let totalW = 0, totalC = 0;
+      Object.values(state.logs).forEach(l => {
+        if(l.weights) totalW += (l.wMin || 20);
+        if(l.cardio) totalC += (l.cMin || 20);
+      });
+
+      document.getElementById('stat-total-workouts').innerText = Object.keys(state.logs).length;
+      document.getElementById('stat-weights-min').innerText = `${totalW}m`;
+      document.getElementById('stat-cardio-min').innerText = `${totalC}m`;
+    }
+
+    function renderBadgesTab() {
+      const grid = document.getElementById('badges-grid');
+      grid.innerHTML = '';
+      let unlocked = 0;
+
+      BADGES.forEach(badge => {
+        const isUnlocked = badge.check(state.logs);
+        if(isUnlocked) unlocked++;
+
+        grid.innerHTML += `
+          <div class="p-4 rounded-2xl border-2 ${isUnlocked ? 'bg-app-card border-app-primary text-app-text shadow-sm' : 'bg-app-bg border-app-border opacity-50'} flex items-center space-x-4">
+            <span class="text-3xl">${badge.icon}</span>
+            <div>
+              <p class="text-sm font-black">${badge.title}</p>
+              <p class="text-xs text-app-subtext font-bold mt-0.5">${badge.desc}</p>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('badge-count').innerText = `${unlocked} / ${BADGES.length} Unlocked`;
     }
 
     function switchTab(tab) {
-      ['tracker', 'calendar', 'badges'].forEach(t => {
-        document.getElementById(`view-${t}`).classList.add('hidden');
-        const btn = document.getElementById(`btn-tab-${t}`);
-        btn.classList.remove('bg-churro-orange', 'text-white');
-        btn.classList.add('bg-orange-100', 'text-churro-dark');
+      ['home', 'progress', 'badges'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        document.getElementById(`nav-btn-${t}`).classList.remove('text-app-primary');
+        document.getElementById(`nav-btn-${t}`).classList.add('text-app-subtext');
       });
 
-      document.getElementById(`view-${tab}`).classList.remove('hidden');
-      const activeBtn = document.getElementById(`btn-tab-${tab}`);
-      activeBtn.classList.remove('bg-orange-100', 'text-churro-dark');
-      activeBtn.classList.add('bg-churro-orange', 'text-white');
+      document.getElementById(`tab-${tab}`).classList.remove('hidden');
+      document.getElementById(`nav-btn-${tab}`).classList.remove('text-app-subtext');
+      document.getElementById(`nav-btn-${tab}`).classList.add('text-app-primary');
     }
 
-    function playSynthChime() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.3);
-      } catch(e){}
+    function churroMeow() {
+      const msgs = [
+        "Meow! 3x a week is our goal — you've got this! ✨",
+        "Purrr... You're doing amazing! Let's clear today's workout! 🐾"
+      ];
+      document.getElementById('churro-dialogue').innerText = msgs[Math.floor(Math.random() * msgs.length)];
     }
   </script>
 </body>
