@@ -73,7 +73,7 @@
 
 <body class="min-h-screen flex flex-col max-w-md mx-auto relative bg-app-bg pb-28 shadow-2xl">
 
-  <!-- Top Header: Clean & Big -->
+  <!-- Top Header -->
   <header class="pt-12 pb-4 px-6 flex items-center justify-between border-b-2 border-app-border bg-app-bg sticky top-0 z-30">
     <div class="flex items-center space-x-2">
       <span class="text-3xl">🐾</span>
@@ -86,7 +86,7 @@
     </div>
   </header>
 
-  <!-- TAB 1: MAIN HOME (ZERO SCROLL) -->
+  <!-- TAB 1: MAIN HOME -->
   <main id="tab-home" class="p-6 flex-1 flex flex-col justify-between items-center space-y-6">
     
     <!-- Coach Churro Mascot Banner -->
@@ -186,51 +186,91 @@
     </div>
   </main>
 
-  <!-- LOGGING MODAL SHEET -->
+  <!-- LOGGING MODAL SHEET (CLEAN BULLETED 1 & 2 SETUP) -->
   <div id="log-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex flex-col justify-end hidden">
-    <div class="bg-app-card border-t-4 border-app-border rounded-t-3xl p-6 space-y-6 max-w-md mx-auto w-full shadow-2xl pb-10">
-      <div class="flex items-center justify-between border-b-2 border-app-border pb-4">
+    <div class="bg-app-card border-t-4 border-app-border rounded-t-3xl p-6 space-y-5 max-w-md mx-auto w-full shadow-2xl pb-10">
+      <div class="flex items-center justify-between border-b-2 border-app-border pb-3">
         <h3 class="text-2xl font-black text-app-text">Log Workout</h3>
         <button onclick="closeLogModal()" class="text-app-subtext font-black text-lg">Cancel</button>
       </div>
 
-      <div class="space-y-3">
-        <label class="text-sm font-black text-app-subtext uppercase tracking-wider">1. Focus Area</label>
-        <div class="grid grid-cols-2 gap-3">
-          <button onclick="selectModalFocus('Peloton Lower Body')" class="modal-focus-btn btn-3d-card p-4 rounded-2xl text-left text-base font-black flex justify-between items-center">
-            <span>Peloton Lower</span><span class="text-xl">🦵</span>
+      <!-- 1. Cardio Section -->
+      <div class="space-y-2 bg-app-bg p-4 rounded-2xl border-2 border-app-border">
+        <div class="flex items-center justify-between">
+          <label class="text-base font-black text-app-text flex items-center space-x-2">
+            <span>1. 🚴 Cardio</span>
+          </label>
+          <button id="toggle-cardio-btn" onclick="toggleCardioSection()" class="btn-3d-card px-3 py-1.5 rounded-xl text-xs font-black text-app-subtext">
+            OFF
           </button>
-          <button onclick="selectModalFocus('Peloton Upper Body')" class="modal-focus-btn btn-3d-card p-4 rounded-2xl text-left text-base font-black flex justify-between items-center">
-            <span>Peloton Upper</span><span class="text-xl">💪</span>
-          </button>
-          <button onclick="selectModalFocus('Peloton Full Body')" class="modal-focus-btn btn-3d-card p-4 rounded-2xl text-left text-base font-black flex justify-between items-center">
-            <span>Peloton Full</span><span class="text-xl">🔥</span>
-          </button>
-          <button onclick="selectModalFocus('Peloton Arms & Core')" class="modal-focus-btn btn-3d-card p-4 rounded-2xl text-left text-base font-black flex justify-between items-center">
-            <span>Arms & Core</span><span class="text-xl">✨</span>
-          </button>
+        </div>
+
+        <div id="cardio-duration-box" class="space-y-1.5 pt-2 hidden">
+          <p class="text-xs font-black text-app-subtext uppercase">Cardio Duration</p>
+          <div class="grid grid-cols-6 gap-1.5">
+            <button onclick="selectCardioDuration(10)" class="cardio-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">10m</button>
+            <button onclick="selectCardioDuration(15)" class="cardio-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">15m</button>
+            <button onclick="selectCardioDuration(20)" class="cardio-dur-pill btn-3d-card btn-3d-card-selected py-2 rounded-xl text-center text-xs font-black">20m</button>
+            <button onclick="selectCardioDuration(30)" class="cardio-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">30m</button>
+            <button onclick="selectCardioDuration(45)" class="cardio-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">45m</button>
+            <button onclick="selectCardioDuration(60)" class="cardio-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">60m</button>
+          </div>
         </div>
       </div>
 
-      <div class="space-y-3">
-        <label class="text-sm font-black text-app-subtext uppercase tracking-wider">2. Type & Duration</label>
-        <div class="grid grid-cols-2 gap-3">
-          <button id="btn-toggle-weights" onclick="toggleModalType('weights')" class="btn-3d-card btn-3d-card-selected p-4 rounded-2xl text-left text-base font-black flex items-center space-x-2">
-            <span>🏋️ Weights (20m)</span>
+      <!-- 2. Weights Section -->
+      <div class="space-y-3 bg-app-bg p-4 rounded-2xl border-2 border-app-border">
+        <div class="flex items-center justify-between">
+          <label class="text-base font-black text-app-text flex items-center space-x-2">
+            <span>2. 🏋️ Weights</span>
+          </label>
+          <button id="toggle-weights-btn" onclick="toggleWeightsSection()" class="btn-3d-card btn-3d-card-selected px-3 py-1.5 rounded-xl text-xs font-black text-app-primary">
+            ON
           </button>
-          <button id="btn-toggle-cardio" onclick="toggleModalType('cardio')" class="btn-3d-card p-4 rounded-2xl text-left text-base font-black flex items-center space-x-2">
-            <span>🚴 Cardio (20m)</span>
-          </button>
+        </div>
+
+        <div id="weights-options-box" class="space-y-3 pt-1">
+          <!-- Focus Area -->
+          <div class="space-y-1.5">
+            <p class="text-xs font-black text-app-subtext uppercase">Focus Area</p>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="selectWeightsFocus('Lower Body')" class="weights-focus-btn btn-3d-card p-2.5 rounded-xl text-left text-xs font-black flex justify-between items-center">
+                <span>Lower Body</span><span>🦵</span>
+              </button>
+              <button onclick="selectWeightsFocus('Upper Body')" class="weights-focus-btn btn-3d-card p-2.5 rounded-xl text-left text-xs font-black flex justify-between items-center">
+                <span>Upper Body</span><span>💪</span>
+              </button>
+              <button onclick="selectWeightsFocus('Full Body')" class="weights-focus-btn btn-3d-card btn-3d-card-selected p-2.5 rounded-xl text-left text-xs font-black flex justify-between items-center">
+                <span>Full Body</span><span>🔥</span>
+              </button>
+              <button onclick="selectWeightsFocus('Arms & Core')" class="weights-focus-btn btn-3d-card p-2.5 rounded-xl text-left text-xs font-black flex justify-between items-center">
+                <span>Arms & Core</span><span>✨</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Duration -->
+          <div class="space-y-1.5">
+            <p class="text-xs font-black text-app-subtext uppercase">Weights Duration</p>
+            <div class="grid grid-cols-6 gap-1.5">
+              <button onclick="selectWeightsDuration(10)" class="weights-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">10m</button>
+              <button onclick="selectWeightsDuration(15)" class="weights-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">15m</button>
+              <button onclick="selectWeightsDuration(20)" class="weights-dur-pill btn-3d-card btn-3d-card-selected py-2 rounded-xl text-center text-xs font-black">20m</button>
+              <button onclick="selectWeightsDuration(30)" class="weights-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">30m</button>
+              <button onclick="selectWeightsDuration(45)" class="weights-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">45m</button>
+              <button onclick="selectWeightsDuration(60)" class="weights-dur-pill btn-3d-card py-2 rounded-xl text-center text-xs font-black">60m</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <button onclick="submitModalLog()" class="w-full py-5 rounded-2xl font-black text-xl uppercase tracking-wider text-white btn-3d-primary transition mt-3">
+      <button onclick="submitModalLog()" class="w-full py-5 rounded-2xl font-black text-xl uppercase tracking-wider text-white btn-3d-primary transition mt-2">
         SAVE WORKOUT
       </button>
     </div>
   </div>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Bottom Nav -->
   <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-app-card border-t-2 border-app-border px-4 py-3 flex justify-around z-40 shadow-lg">
     <button onclick="switchTab('home')" id="nav-btn-home" class="flex flex-col items-center text-app-primary">
       <i data-lucide="home" class="w-7 h-7"></i>
@@ -253,9 +293,11 @@
   <script>
     let state = {
       logs: JSON.parse(localStorage.getItem('churro_logs') || '{}'),
-      selectedFocus: 'Peloton Full Body',
-      hasWeights: true,
       hasCardio: false,
+      cardioDuration: 20,
+      hasWeights: true,
+      weightsFocus: 'Full Body',
+      weightsDuration: 20,
       challengeStartDate: localStorage.getItem('churro_start_date') || new Date().toISOString().split('T')[0]
     };
 
@@ -287,14 +329,12 @@
       document.getElementById('header-total').innerText = `${total}/18`;
       document.getElementById('roadmap-pct').innerText = `${Math.min(100, Math.round((total/18)*100))}% Done`;
 
-      // Determine Current Week
       let currentWeekNum = Math.min(6, Math.floor(total / 3) + 1);
       const workoutsInCurrentWk = getWorkoutsInWeek(currentWeekNum);
 
       document.getElementById('active-week-title').innerText = `Week ${currentWeekNum}: ${getWeekTitle(currentWeekNum)}`;
       document.getElementById('week-status-text').innerText = `${workoutsInCurrentWk} of 3 Workouts Completed`;
 
-      // Render dots for active week
       const dotsContainer = document.getElementById('week-dots');
       dotsContainer.innerHTML = '';
       for(let i=1; i<=3; i++) {
@@ -305,7 +345,6 @@
         }
       }
 
-      // Render Quest Roadmap Tab
       const container = document.getElementById('quest-path-container');
       container.innerHTML = '';
 
@@ -368,34 +407,83 @@
       document.getElementById('log-modal').classList.add('hidden');
     }
 
-    function selectModalFocus(focus) {
-      state.selectedFocus = focus;
-      document.querySelectorAll('.modal-focus-btn').forEach(btn => {
+    /* Cardio Controls */
+    function toggleCardioSection() {
+      state.hasCardio = !state.hasCardio;
+      const btn = document.getElementById('toggle-cardio-btn');
+      const box = document.getElementById('cardio-duration-box');
+
+      if(state.hasCardio) {
+        btn.innerText = "ON";
+        btn.className = "btn-3d-card btn-3d-card-selected px-3 py-1.5 rounded-xl text-xs font-black text-app-primary";
+        box.classList.remove('hidden');
+      } else {
+        btn.innerText = "OFF";
+        btn.className = "btn-3d-card px-3 py-1.5 rounded-xl text-xs font-black text-app-subtext";
+        box.classList.add('hidden');
+      }
+    }
+
+    function selectCardioDuration(mins) {
+      state.cardioDuration = mins;
+      document.querySelectorAll('.cardio-dur-pill').forEach(btn => {
         btn.classList.remove('btn-3d-card-selected');
-        if(btn.innerText.includes(focus.split(' ')[1] || focus)) {
+        if(btn.innerText.includes(`${mins}m`)) {
           btn.classList.add('btn-3d-card-selected');
         }
       });
     }
 
-    function toggleModalType(type) {
-      if(type === 'weights') {
-        state.hasWeights = !state.hasWeights;
-        document.getElementById('btn-toggle-weights').classList.toggle('btn-3d-card-selected', state.hasWeights);
+    /* Weights Controls */
+    function toggleWeightsSection() {
+      state.hasWeights = !state.hasWeights;
+      const btn = document.getElementById('toggle-weights-btn');
+      const box = document.getElementById('weights-options-box');
+
+      if(state.hasWeights) {
+        btn.innerText = "ON";
+        btn.className = "btn-3d-card btn-3d-card-selected px-3 py-1.5 rounded-xl text-xs font-black text-app-primary";
+        box.classList.remove('hidden');
       } else {
-        state.hasCardio = !state.hasCardio;
-        document.getElementById('btn-toggle-cardio').classList.toggle('btn-3d-card-selected', state.hasCardio);
+        btn.innerText = "OFF";
+        btn.className = "btn-3d-card px-3 py-1.5 rounded-xl text-xs font-black text-app-subtext";
+        box.classList.add('hidden');
       }
     }
 
+    function selectWeightsFocus(focus) {
+      state.weightsFocus = focus;
+      document.querySelectorAll('.weights-focus-btn').forEach(btn => {
+        btn.classList.remove('btn-3d-card-selected');
+        if(btn.innerText.includes(focus.split(' ')[0])) {
+          btn.classList.add('btn-3d-card-selected');
+        }
+      });
+    }
+
+    function selectWeightsDuration(mins) {
+      state.weightsDuration = mins;
+      document.querySelectorAll('.weights-dur-pill').forEach(btn => {
+        btn.classList.remove('btn-3d-card-selected');
+        if(btn.innerText.includes(`${mins}m`)) {
+          btn.classList.add('btn-3d-card-selected');
+        }
+      });
+    }
+
     function submitModalLog() {
+      if(!state.hasCardio && !state.hasWeights) {
+        alert("Please select at least Cardio or Weights!");
+        return;
+      }
+
       const todayKey = new Date().toISOString().split('T')[0];
       state.logs[todayKey] = {
         weights: state.hasWeights,
-        wMin: state.hasWeights ? 20 : 0,
+        wMin: state.hasWeights ? state.weightsDuration : 0,
+        focus: state.hasWeights ? state.weightsFocus : null,
         cardio: state.hasCardio,
-        cMin: state.hasCardio ? 20 : 0,
-        focus: state.selectedFocus
+        cMin: state.hasCardio ? state.cardioDuration : 0
       };
 
       saveState();
