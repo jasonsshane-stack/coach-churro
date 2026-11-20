@@ -100,7 +100,7 @@
       border-right: 8.5px solid #FFF9F5;
     }
 
-    /* DUOLINGO-STYLE CHURRO ANIMATIONS */
+    /* CHURRO ANIMATIONS */
     @keyframes churro-breathe {
       0%, 100% { transform: translateY(0px) scaleY(1); }
       50% { transform: translateY(-3px) scaleY(1.02); }
@@ -140,15 +140,15 @@
     }
     .churro-tail {
       animation: churro-tail-wag 2s ease-in-out infinite;
-      transform-origin: 138px 125px;
+      transform-origin: 142px 135px;
     }
     .churro-eyes {
       animation: churro-blink 4.2s infinite;
-      transform-origin: 100px 82px;
+      transform-origin: 100px 84px;
     }
     .churro-ear-l {
       animation: churro-ear-twitch 5s infinite;
-      transform-origin: 70px 52px;
+      transform-origin: 68px 50px;
     }
     .churro-excited {
       animation: churro-jump 0.55s cubic-bezier(0.28, 0.84, 0.42, 1) 2 !important;
@@ -182,55 +182,94 @@
     
     <!-- Coach Churro Mascot + Speech Bubble Card -->
     <div onclick="churroMeow()" class="w-full bg-app-card border-2 border-app-border rounded-3xl p-4 flex items-center space-x-4 shadow-sm flex-shrink-0 cursor-pointer active:scale-[0.99] transition relative">
-      <div id="churro-wrapper" class="w-20 h-20 flex-shrink-0 relative">
+      <div id="churro-wrapper" class="w-22 h-22 flex-shrink-0 relative">
         <!-- Floating Cheer Emoji Container -->
         <div id="churro-cheer-bubble" class="absolute -top-3 -right-1 text-lg pointer-events-none z-10"></div>
 
+        <!-- CUSTOM CHURRO TABICO PORTRAIT SVG -->
         <svg id="churro-svg" viewBox="0 0 200 200" class="w-20 h-20 drop-shadow-md churro-idle overflow-visible">
-          <!-- Wagging Tail -->
-          <path class="churro-tail" d="M 145 130 C 175 120, 185 80, 165 60 C 155 50, 145 65, 152 75 C 162 90, 155 115, 138 125 Z" fill="#2C221E" />
-          
-          <!-- Body -->
-          <ellipse cx="100" cy="135" rx="55" ry="45" fill="#FFF9F5" stroke="#2C221E" stroke-width="3" />
-          <path d="M 50 120 Q 70 110 65 145 Q 48 150 50 120 Z" fill="#2C221E" />
-          <path d="M 135 110 Q 150 130 130 155 Q 120 135 135 110 Z" fill="#FF5E3A" />
-          
-          <!-- Paws -->
-          <ellipse cx="75" cy="172" rx="12" ry="8" fill="#FFF" stroke="#2C221E" stroke-width="2.5" />
-          <ellipse cx="125" cy="172" rx="12" ry="8" fill="#FFF" stroke="#2C221E" stroke-width="2.5" />
-          
-          <!-- Head -->
-          <circle cx="100" cy="85" r="42" fill="#FFF9F5" stroke="#2C221E" stroke-width="3" />
-          <path d="M 60 70 Q 80 60 75 90 Q 60 92 60 70 Z" fill="#2C221E" />
-          <path d="M 140 70 Q 120 60 125 90 Q 140 92 140 70 Z" fill="#FF5E3A" />
-          <path d="M 85 90 Q 100 80 115 90 Q 110 115 90 115 Z" fill="#FFFFFF" />
-          
-          <!-- Ears -->
-          <path class="churro-ear-l" d="M 65 55 L 50 22 L 80 48 Z" fill="#FF5E3A" stroke="#2C221E" stroke-width="2.5" />
-          <path d="M 135 55 L 150 22 L 120 48 Z" fill="#2C221E" stroke="#2C221E" stroke-width="2.5" />
-          
-          <!-- Blinking Eyes -->
-          <g class="churro-eyes">
-            <ellipse cx="82" cy="82" rx="7" ry="9" fill="#81B29A" stroke="#2C221E" stroke-width="2" />
-            <ellipse cx="118" cy="82" rx="7" ry="9" fill="#81B29A" stroke="#2C221E" stroke-width="2" />
-            <circle cx="80" cy="80" r="2.5" fill="#FFF" />
-            <circle cx="116" cy="80" r="2.5" fill="#FFF" />
+          <!-- Plush Ginger-Brown Tabby Tail -->
+          <g class="churro-tail">
+            <path d="M 145 138 C 178 130, 188 92, 168 72 C 158 62, 146 76, 154 87 C 164 100, 156 122, 138 132 Z" fill="#A65E2E" stroke="#2C221E" stroke-width="2.8" stroke-linejoin="round" />
+            <path d="M 158 118 Q 168 114 170 120 M 164 102 Q 174 98 176 104 M 163 86 Q 171 81 173 87" fill="none" stroke="#3D2C24" stroke-width="2.5" stroke-linecap="round" />
           </g>
           
-          <!-- Nose & Mouth -->
-          <polygon points="100,92 95,87 105,87" fill="#E8A598" />
-          <path d="M 100 92 L 100 97 Q 94 102 88 98 M 100 97 Q 106 102 112 98" fill="none" stroke="#2C221E" stroke-width="2" />
+          <!-- Round Plush Body (Snowy White Chest & Belly) -->
+          <ellipse cx="100" cy="138" rx="60" ry="46" fill="#FFFFFF" stroke="#2C221E" stroke-width="3" />
           
-          <!-- Sweatband -->
-          <path d="M 60 52 Q 100 42 140 52" fill="none" stroke="#FFB300" stroke-width="10" stroke-linecap="round" />
-          <path d="M 60 52 Q 100 42 140 52" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" />
+          <!-- Brown/Black Tabby & Ginger Saddle Patches on Sides -->
+          <path d="M 42 126 C 44 105, 64 102, 66 122 C 67 136, 52 146, 43 138 Z" fill="#4A3931" />
+          <path d="M 46 118 L 58 116 M 45 128 L 60 126" stroke="#231915" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M 158 124 C 156 103, 134 102, 132 122 C 131 138, 146 148, 156 138 Z" fill="#4A3931" />
+          <path d="M 142 114 C 150 112, 156 120, 152 130 C 146 134, 138 126, 142 114 Z" fill="#C46D34" />
+          <path d="M 140 120 L 154 118 M 138 130 L 152 128" stroke="#231915" stroke-width="2.5" stroke-linecap="round" />
+
+          <!-- Plush White Chest Fluff -->
+          <path d="M 84 128 Q 100 136 116 128" fill="none" stroke="#EAE0D8" stroke-width="2.5" stroke-linecap="round" />
+
+          <!-- Cute White Paws -->
+          <ellipse cx="74" cy="176" rx="13" ry="8" fill="#FFFFFF" stroke="#2C221E" stroke-width="2.8" />
+          <path d="M 70 179 L 70 174 M 78 179 L 78 174" stroke="#2C221E" stroke-width="1.8" stroke-linecap="round" />
+          <ellipse cx="126" cy="176" rx="13" ry="8" fill="#FFFFFF" stroke="#2C221E" stroke-width="2.8" />
+          <path d="M 122 179 L 122 174 M 130 179 L 130 174" stroke="#2C221E" stroke-width="1.8" stroke-linecap="round" />
+          
+          <!-- Chubby Round Cheeks & Head -->
+          <path d="M 54 84 C 54 54, 146 54, 146 84 C 148 112, 126 122, 100 122 C 74 122, 52 112, 54 84 Z" fill="#FFFFFF" stroke="#2C221E" stroke-width="3" />
+          
+          <!-- Left Brown/Black Tabby Top Cap & Ginger Cheek -->
+          <path d="M 56 76 C 58 55, 84 52, 95 62 L 88 80 L 66 86 Z" fill="#4A3931" />
+          <path d="M 55 82 C 55 98, 68 106, 80 100 C 83 92, 75 82, 65 80 Z" fill="#C96E32" />
+          <path d="M 64 66 L 78 68 M 62 74 L 76 76" stroke="#231915" stroke-width="2.2" stroke-linecap="round" />
+
+          <!-- Right Brown/Black Tabby Top Cap & Ginger Cheek -->
+          <path d="M 144 76 C 142 55, 116 52, 105 62 L 112 80 L 134 86 Z" fill="#4A3931" />
+          <path d="M 145 82 C 145 98, 132 106, 120 100 C 117 92, 125 82, 135 80 Z" fill="#C96E32" />
+          <path d="M 136 66 L 122 68 M 138 74 L 124 76" stroke="#231915" stroke-width="2.2" stroke-linecap="round" />
+
+          <!-- Signature White Inverted-V Blaze Between Eyes -->
+          <polygon points="100,58 87,88 113,88" fill="#FFFFFF" />
+          
+          <!-- Tabby Ears with Warm Pink/Ginger Inner Ear -->
+          <g class="churro-ear-l">
+            <path d="M 63 58 L 49 23 L 82 49 Z" fill="#4A3931" stroke="#2C221E" stroke-width="2.8" stroke-linejoin="round" />
+            <path d="M 63 53 L 54 32 L 75 48 Z" fill="#D98A6C" />
+          </g>
+          <g>
+            <path d="M 137 58 L 151 23 L 118 49 Z" fill="#4A3931" stroke="#2C221E" stroke-width="2.8" stroke-linejoin="round" />
+            <path d="M 137 53 L 146 32 L 125 48 Z" fill="#D98A6C" />
+          </g>
+          
+          <!-- Big Expressive Green/Hazel Eyes -->
+          <g class="churro-eyes">
+            <ellipse cx="81" cy="84" rx="7.5" ry="9" fill="#5D7A52" stroke="#2C221E" stroke-width="2.2" />
+            <circle cx="81" cy="84" r="4.2" fill="#1E1916" />
+            <circle cx="78.5" cy="81" r="2.3" fill="#FFFFFF" />
+
+            <ellipse cx="119" cy="84" rx="7.5" ry="9" fill="#5D7A52" stroke="#2C221E" stroke-width="2.2" />
+            <circle cx="119" cy="84" r="4.2" fill="#1E1916" />
+            <circle cx="116.5" cy="81" r="2.3" fill="#FFFFFF" />
+          </g>
+          
+          <!-- Churro's Signature Tiny Ginger Smudge Next to Her Nose! -->
+          <ellipse cx="92" cy="96" rx="4.2" ry="3.2" fill="#D47E46" opacity="0.85" />
+
+          <!-- Cute Pink Nose & Mouth -->
+          <polygon points="100,96 95,90 105,90" fill="#E68A82" stroke="#2C221E" stroke-width="1.2" stroke-linejoin="round" />
+          <path d="M 100 96 L 100 101 Q 94 106 88 102 M 100 101 Q 106 106 112 102" fill="none" stroke="#2C221E" stroke-width="2.2" stroke-linecap="round" />
+          
+          <!-- Delicate Whiskers -->
+          <path d="M 66 95 L 44 92 M 66 101 L 45 104 M 134 95 L 156 92 M 134 101 L 155 104" stroke="#8C7E76" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
+
+          <!-- Sporty Gold Sweatband -->
+          <path d="M 58 55 Q 100 45 142 55" fill="none" stroke="#FFB300" stroke-width="9" stroke-linecap="round" />
+          <path d="M 58 55 Q 100 45 142 55" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" />
         </svg>
       </div>
 
       <!-- Speech Bubble with Pointer Tail -->
       <div id="speech-bubble-box" class="flex-1 speech-bubble p-3.5 shadow-xs">
         <p id="churro-dialogue" class="text-sm font-extrabold text-app-text leading-snug">
-          "3 workouts needed to clear Week 1! You've got this! 🐾"
+          "3 workouts a week is our goal — you've totally got this! 🐾"
         </p>
       </div>
     </div>
@@ -411,7 +450,6 @@
       lucide.createIcons();
       renderApp();
 
-      // Rotate motivating speech bubble automatically every 8 seconds
       setInterval(() => {
         if (!document.getElementById('tab-home').classList.contains('hidden')) {
           cycleSpeechBubble(false);
